@@ -1,0 +1,44 @@
+<app-header title="Login"></app-header>
+<ion-content class="ion-padding">
+    <div class="ion-text-center">
+        <app-logo></app-logo>
+      </div>
+    <div class="d-flex-center">
+      <form  class="auth-form">
+
+    <!-- Nombre -->
+      <ion-item lines="full"  >
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+      </ion-item>
+     
+    <!-- Espacio vertical entre los inputs -->
+    <div style="margin-bottom: 6px;"></div>  
+
+    <!-- Contraseña -->
+    <ion-item lines="full">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+        <ion-icon slot="end" name="eye" (click)="togglePasswordVisibility('password')" style="vertical-align: middle; margin-top: 24px;"></ion-icon>
+      </ion-item>
+           
+
+            <p routerLink="forgot-password"  class="ion-text-end">¿Olvidaste tu contraseña?</p>
+
+            <ion-button color="medium" expand="block" mode="ios" class="submit" type="submit"  (click)="login()">
+                Ingresar
+                <ion-icon slot="end" name="log-in-outline"></ion-icon>
+            </ion-button>
+
+
+            <ion-button color="medium" class="ion-margin-top" routerLink="sign-up"  expand="block" mode="ios" >
+                Registrarse
+                <ion-icon slot="end" name="person-add-outline"></ion-icon>
+            </ion-button>
+            
+        </form>
+
+    </div>
+</ion-content>

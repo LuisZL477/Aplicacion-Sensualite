@@ -1,0 +1,7 @@
+{
+  "name": "Sensualite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

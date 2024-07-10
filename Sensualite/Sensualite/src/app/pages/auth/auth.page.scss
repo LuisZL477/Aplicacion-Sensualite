@@ -1,0 +1,21 @@
+.d-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-items: flex-start;
+    height: 90%; 
+}
+
+.custom-input-spacing {
+    margin-bottom: 20px; 
+}
+
+.auth-form ion-item {
+    --border-radius: 20px; /* ajusta según el redondeo deseado */
+  }
+
+.custom-input-border {
+
+    padding: 30px; 
+    display: inline-block; 
+  }
