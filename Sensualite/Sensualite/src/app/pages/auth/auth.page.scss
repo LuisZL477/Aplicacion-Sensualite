@@ -3,19 +3,65 @@
     justify-content: center;
     align-items: center;
     align-items: flex-start;
-    height: 90%; 
+    height: 100vh;
 }
 
 .custom-input-spacing {
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .auth-form ion-item {
-    --border-radius: 20px; /* ajusta según el redondeo deseado */
-  }
+    --border-radius: 20px;
+    /* ajusta según el redondeo deseado */
+}
 
 .custom-input-border {
+    padding: 30px;
+    display: inline-block;
+}
 
-    padding: 30px; 
-    display: inline-block; 
-  }
+.forgot-password-text {
+    color: rgb(255, 29, 153);
+    /* Cambia el color del texto a rosa */
+}
+
+.custom-button {
+    --background: rgb(151, 58, 109);
+    /* Fondo del botón rosa */
+    /* Contorno rosa más oscuro */
+    --border-width: 4px;
+    --border-color: #cc0066;
+    color: #cc0066;
+    /* Ancho del contorno */
+    --border-style: solid;
+}
+
+
+/* Estilos para hover */
+
+.custom-button:hover {
+    --border-color: #cc0066;
+    color: #cc0066;
+}
+
+
+/* Estilos para modo oscuro */
+
+@media (prefers-color-scheme: dark) {
+    .custom-button {
+        --border-color: white;
+        color: rgb(255, 255, 255);
+        /* Contorno blanco en modo oscuro */
+    }
+}
+
+
+/* Estilos para modo claro */
+
+@media (prefers-color-scheme: light) {
+    .custom-button {
+        --border-color: black;
+        color: black;
+        /* Contorno negro en modo claro */
+    }
+}

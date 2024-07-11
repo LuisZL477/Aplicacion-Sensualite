@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/users';
 import { UserService } from 'src/app/services/user.service';
@@ -10,24 +10,21 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
 })
-export class AuthPage implements OnInit {
+export class AuthPage  {
 
-  username: string = '';
+  email: string = '';
   password: string = '';
 
   constructor(private toastr: ToastrService, private _userService: UserService,
     private router: Router ) {   }
 
-  ngOnInit() {
-
-  }
 
   login() {
 
     //Validamos que el usuario ingrese datos
 
-    if(this.username == '' || this.password == ''){
-      this.toastr.error('Todos los campos son obligatorios', 'Error');
+    if(this.email == '' || this.password == ''){
+      this.toastr.warning('Todos los campos son obligatorios', 'Campos vacíos');
       return;
     }
 
@@ -35,7 +32,7 @@ export class AuthPage implements OnInit {
 
     const user: User= {
       id:0,
-      username: this.username,
+      email: this.email,
       password: this.password,
     }
 
@@ -59,7 +56,7 @@ export class AuthPage implements OnInit {
     if(e.error.msg){
       this.toastr.error(e.error.msg, ' Error');
     } else {
-      this.toastr.error('Upps ocurrio un error, comuniquese  con el administrador', ' Error');
+      this.toastr.error('¡A ocurrido un error con el servidor, comuniquese con el administrador', ' Error servidor');
     }
   }
 

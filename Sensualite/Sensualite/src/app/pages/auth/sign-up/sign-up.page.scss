@@ -2,34 +2,77 @@
     max-width: 500px;
     width: 100%;
     margin: auto;
-  
-  }
-  
-  .d-flex-center {
+}
+
+.d-flex-center {
     display: flex;
     justify-content: center;
     align-items: center;
     align-items: flex-start;
-    height: 90%; 
-  }
-  
-  .auth-form ion-item {
-    --border-radius: 20px; /* ajusta según el redondeo deseado */
-  }
-  
-  .custom-input-spacing {
-    margin-bottom: 20px; 
+    height: 90%;
 }
 
+.auth-form ion-item {
+    --border-radius: 20px;
+    /* ajusta según el redondeo deseado */
+}
+
+.custom-input-spacing {
+    margin-bottom: 20px;
+}
 
 .custom-input-border {
+    padding: 30px;
+    display: inline-block;
+}
 
-  padding: 30px; 
-  display: inline-block; 
+.custom-button {
+    --background: rgb(151, 58, 109);
+    /* Fondo del botón rosa */
+    /* Contorno rosa más oscuro */
+    --border-width: 4px;
+    --border-color: #cc0066;
+    color: #cc0066;
+    /* Ancho del contorno */
+    --border-style: solid;
 }
 
 
+/* Estilos para hover */
+
+.custom-button:hover {
+    --border-color: #cc0066;
+    color: #cc0066;
+}
 
 
-  
-  
+/* Estilos para modo oscuro */
+
+@media (prefers-color-scheme: dark) {
+    .custom-button {
+        --border-color: white;
+        color: rgb(255, 255, 255);
+        /* Contorno blanco en modo oscuro */
+    }
+}
+
+
+/* Estilos para modo claro */
+
+@media (prefers-color-scheme: light) {
+    .custom-button {
+        --border-color: black;
+        color: black;
+        /* Contorno negro en modo claro */
+    }
+}
+
+.shield-icon {
+    font-size: 80px;
+    background-size: cover;
+    margin-top: -5%;
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    border-radius: 50%;
+}

@@ -1,7 +1,13 @@
 {
   "dependencies": {
     "@angular/animations": "^18.0.6",
+    "@angular/core": "^18.1.0",
+    "@capacitor/core": "6.1.0",
     "bootstrap": "^5.3.3",
+    "ionic": "^5.4.16",
     "ngx-toastr": "^19.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.1.0"
   }
 }

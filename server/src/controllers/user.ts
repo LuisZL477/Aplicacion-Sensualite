@@ -48,14 +48,14 @@ export const newUser = async (req:Request, res:Response) => {
 
 export const loginUser =  async (req:Request, res:Response) => {
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     // Validamos si el usuario existe en ña base de datos
-    const user : any =  await User.findOne({where: {username : username}})
+    const user : any =  await User.findOne({where: {email : email}})
 
     if(!user) {
         return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${username} en la base de datos`
+            msg: `No existe un usuario con el nombre ${email} en la base de datos`
         })
     }
 
@@ -69,7 +69,7 @@ export const loginUser =  async (req:Request, res:Response) => {
 
     // Generamos token
     const token = jwt.sign({
-        username: username
+        email: email
     }, process.env.SECRET_KEY || 'pepito123');
 
     res.json(token);

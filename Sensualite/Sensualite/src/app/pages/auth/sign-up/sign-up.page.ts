@@ -36,13 +36,13 @@ export class SignUpPage {
   addUser() {
     // Validar que el usuario ingrese campos
     if (!this.username || !this.last_name || this.age === undefined || !this.email || !this.address || this.tel === undefined || !this.password || !this.confirmpassword) {
-      this.toastr.error('Todos los campos son obligatorios', 'Error');
+      this.toastr.warning('Todos los campos son obligatorios', 'Campos vacíos');
       return;
     }
 
     // Validar que las contraseñas coincidan
     if (this.password !== this.confirmpassword) {
-      this.toastr.error('Las contraseñas no coinciden', 'Error');
+      this.toastr.warning('Las contraseñas no coinciden', 'Contraseña inválida');
       return;
     }
 
@@ -62,7 +62,7 @@ export class SignUpPage {
     this._userService.signIn(user).subscribe({
       next: (v) => {
         this.loading = false;
-        this.toastr.success(`El usuario ${this.username} fue registrado con éxito`, 'Usuario registrado');
+        this.toastr.success(`El usuario ${this.username} con la cuenta ${this.email} fue registrado con éxito`, 'Usuario registrado');
         this.router.navigate(['/auth']);
       },
       error: (e: HttpErrorResponse) => {
@@ -96,7 +96,7 @@ export class SignUpPage {
     if(e.error.msg){
       this.toastr.error(e.error.msg, ' Error');
     } else {
-      this.toastr.error('Upps ocurrio un error, comuniquese  con el administrador', ' Error');
+      this.toastr.error('¡A ocurrido un error con el servidor, comuniquese con el administrador', ' Error servidor');
     }
   }
 

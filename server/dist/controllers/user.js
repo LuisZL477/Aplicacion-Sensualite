@@ -50,12 +50,12 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.newUser = newUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     // Validamos si el usuario existe en ña base de datos
-    const user = yield user_1.default.findOne({ where: { username: username } });
+    const user = yield user_1.default.findOne({ where: { email: email } });
     if (!user) {
         return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${username} en la base de datos`
+            msg: `No existe un usuario con el nombre ${email} en la base de datos`
         });
     }
     // Validamos password 
@@ -67,7 +67,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // Generamos token
     const token = jsonwebtoken_1.default.sign({
-        username: username
+        email: email
     }, process.env.SECRET_KEY || 'pepito123');
     res.json(token);
 });
