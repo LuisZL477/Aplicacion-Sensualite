@@ -1,0 +1,32 @@
+@media (prefers-color-scheme: dark) {
+    .custom-button {
+        --border-color: white;
+        color: rgb(255, 255, 255);
+        /* Contorno blanco en modo oscuro */
+    }
+}
+
+
+/* Estilos para modo claro */
+
+@media (prefers-color-scheme: light) {
+    .custom-button {
+        --border-color: black;
+        color: black;
+        /* Contorno negro en modo claro */
+    }
+}
+
+.shield-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.ion-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: auto;
+    /* optional, adjust as needed */
+}
