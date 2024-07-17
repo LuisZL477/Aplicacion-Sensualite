@@ -5,14 +5,14 @@ import jwt from 'jsonwebtoken';
 
 export const newUser = async (req:Request, res:Response) => {
 
-    const { username, password, last_name, age, email, address , tel} = req.body;
+    const { nombre, password, apellido, edad, correo, domicilio , telefono} = req.body;
 
      // Validamos si el usuario existe en la base de datos
-     const user =  await User.findOne({where: {email : email}})
+     const user =  await User.findOne({where: {correo : correo}})
     
      if(user) {
         return res.status(400).json({
-             msg: `El correo ${email} ya ha sido registrado`
+             msg: `El correo ${correo} ya ha sido registrado`
          })
      }
    
@@ -22,18 +22,18 @@ export const newUser = async (req:Request, res:Response) => {
     try {
         //Guardamos usuario en la base de datos
         await User.create({
-            username: username,
-            last_name: last_name,
-            age: age,
-            email: email,
+            nombre: nombre,
+            apellido: apellido,
+            edad: edad,
+            correo: correo,
             password: hashedpassword,
-            address: address,
-            tel:tel
+            domicilio: domicilio,
+            telefono:telefono
           
         })
     
         res.json({
-            msg: `Usuario ${username} creado exitosamente`,
+            msg: `Usuario ${nombre} creado exitosamente`,
             
         })    
         
@@ -48,14 +48,14 @@ export const newUser = async (req:Request, res:Response) => {
 
 export const loginUser =  async (req:Request, res:Response) => {
 
-    const { email, password } = req.body;
+    const { correo, password } = req.body;
 
     // Validamos si el usuario existe en ña base de datos
-    const user : any =  await User.findOne({where: {email : email}})
+    const user : any =  await User.findOne({where: {correo : correo}})
 
     if(!user) {
         return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${email} en la base de datos`
+            msg: `No existe un usuario con el nombre ${correo} en la base de datos`
         })
     }
 
@@ -69,7 +69,7 @@ export const loginUser =  async (req:Request, res:Response) => {
 
     // Generamos token
     const token = jwt.sign({
-        email: email
+        correo: correo
     }, process.env.SECRET_KEY || 'pepito123');
 
     res.json(token);

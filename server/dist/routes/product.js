@@ -8,5 +8,9 @@ const product_1 = require("../controllers/product");
 const validate_token_1 = __importDefault(require("./validate-token"));
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, product_1.getProducts);
-router.get('/:id', product_1.getProduct);
+router.get('/:id', validate_token_1.default, product_1.getProduct);
+// router.delete('/:id', validateToken, deleteProducts);
+// router.post('/', validateToken, upload.single('imagen'), postProduct);
+// router.put('/:id', validateToken, upload.single('imagen'), updateProduct);
+// router.delete('/uploads/:imagePath', validateToken, deleteImage); // Nueva ruta
 exports.default = router;

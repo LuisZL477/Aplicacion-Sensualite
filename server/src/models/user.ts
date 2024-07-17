@@ -7,20 +7,20 @@ export const User = sequelize.define('user',{
         primaryKey: true,
         autoIncrement: true
     },
-    username:{
+    nombre:{
         type: DataTypes.STRING,
         allowNull: false
         
     }, 
-    last_name: {
+    apellido: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    age: {
+    edad: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    email: {
+    correo: {
         type: DataTypes.STRING,
         unique: true,
       
@@ -30,18 +30,18 @@ export const User = sequelize.define('user',{
         allowNull: false
         
     },
-    address: {
+    domicilio: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    tel: {
+    telefono: {
         type: DataTypes.INTEGER,
         allowNull: false
     }
    
     },{
-        createdAt:false,
-        updatedAt:false
-      } )
+        timestamps:false,
+        tableName:'Usuario'
+    })
 
       export default User;

@@ -1,33 +1,41 @@
-import { DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../db/connection';
 
-export const Product = sequelize.define('product',{
-    id:{
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name:{
-        type: DataTypes.STRING
-    },
-    type_product:{
-        type: DataTypes.STRING
-    },
-    price:{
-        type: DataTypes.DOUBLE
-    },
-    description:{
-        type: DataTypes.STRING
-    },
-    stock:{
-        type: DataTypes.INTEGER
-    },
-    imagen:{
-        type: DataTypes.BLOB
-    },
-    },{
-        createdAt:false,
-        updatedAt:false
-      } )
+export interface ProductInstance extends Model {
+  id: number;
+  nombre: string;
+  tipo: string;
+  precio: number;
+  descripcion: string;
+  existencia: number;
+  imagen: string;
+}
 
-      export default Product;
+export const Product = sequelize.define<ProductInstance>('product', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  nombre: {
+    type: DataTypes.STRING
+  },
+  tipo: {
+    type: DataTypes.STRING
+  },
+  precio: {
+    type: DataTypes.DOUBLE
+  },
+  descripcion: {
+    type: DataTypes.STRING
+  },
+  existencia: {
+    type: DataTypes.INTEGER
+  },
+  imagen: {
+    type: DataTypes.STRING
+  }
+}, {
+  timestamps: false,
+  tableName: 'Productos'
+});

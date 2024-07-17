@@ -12,26 +12,25 @@ exports.Product = connection_1.default.define('product', {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    nombre: {
         type: sequelize_1.DataTypes.STRING
     },
-    type_product: {
+    tipo: {
         type: sequelize_1.DataTypes.STRING
     },
-    price: {
+    precio: {
         type: sequelize_1.DataTypes.DOUBLE
     },
-    description: {
+    descripcion: {
         type: sequelize_1.DataTypes.STRING
     },
-    stock: {
+    existencia: {
         type: sequelize_1.DataTypes.INTEGER
     },
     imagen: {
-        type: sequelize_1.DataTypes.BLOB
-    },
+        type: sequelize_1.DataTypes.STRING
+    }
 }, {
-    createdAt: false,
-    updatedAt: false
+    timestamps: false,
+    tableName: 'Productos'
 });
-exports.default = exports.Product;

@@ -2,7 +2,7 @@ export interface Product{
     id: number,
     nombre: string,
     tipo: string,
-    precio: DoubleRange,
+    precio: number,
     descripcion: string,
     existencia: number,
     imagen: Blob

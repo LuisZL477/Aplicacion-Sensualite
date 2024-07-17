@@ -30,3 +30,14 @@
     width: auto;
     /* optional, adjust as needed */
 }
+
+.product-card {
+    height: 100%;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    /* Ajusta la altura máxima de la imagen según sea necesario */
+}

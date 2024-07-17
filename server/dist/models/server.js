@@ -17,7 +17,7 @@ const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const product_2 = require("./product");
-const user_2 = require("../models/user");
+const user_2 = require("./user");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();

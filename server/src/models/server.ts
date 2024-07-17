@@ -4,7 +4,7 @@ import routesProduct from '../routes/product';
 import routesUser from '../routes/user';
 import db from '../db/connection';
 import { Product } from './product';
-import { User } from '../models/user';
+import { User } from './user';
 
 
  class Server{

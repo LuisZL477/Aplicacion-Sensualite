@@ -14,31 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user"));
+const login_User_1 = __importDefault(require("../models/login_User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre, password, apellido, edad, correo, domicilio, telefono } = req.body;
+    const { username, password, last_name, age, email, address, tel } = req.body;
     // Validamos si el usuario existe en la base de datos
-    const user = yield user_1.default.findOne({ where: { correo: correo } });
+    const user = yield login_User_1.default.findOne({ where: { email: email } });
     if (user) {
         return res.status(400).json({
-            msg: `El correo ${correo} ya ha sido registrado`
+            msg: `El correo ${email} ya ha sido registrado`
         });
     }
     const hashedpassword = yield bcrypt_1.default.hash(password, 10);
     try {
         //Guardamos usuario en la base de datos
-        yield user_1.default.create({
-            nombre: nombre,
-            apellido: apellido,
-            edad: edad,
-            correo: correo,
+        yield login_User_1.default.create({
+            username: username,
+            last_name: last_name,
+            age: age,
+            email: email,
             password: hashedpassword,
-            domicilio: domicilio,
-            telefono: telefono
+            address: address,
+            tel: tel
         });
         res.json({
-            msg: `Usuario ${nombre} creado exitosamente`,
+            msg: `Usuario ${username} creado exitosamente`,
         });
     }
     catch (error) {
@@ -50,12 +50,12 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.newUser = newUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { correo, password } = req.body;
+    const { email, password } = req.body;
     // Validamos si el usuario existe en ña base de datos
-    const user = yield user_1.default.findOne({ where: { correo: correo } });
+    const user = yield login_User_1.default.findOne({ where: { email: email } });
     if (!user) {
         return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${correo} en la base de datos`
+            msg: `No existe un usuario con el nombre ${email} en la base de datos`
         });
     }
     // Validamos password 
@@ -67,7 +67,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // Generamos token
     const token = jsonwebtoken_1.default.sign({
-        correo: correo
+        email: email
     }, process.env.SECRET_KEY || 'pepito123');
     res.json(token);
 });

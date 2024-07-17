@@ -12,7 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AuthPage  {
 
-  email: string = '';
+  correo: string = '';
   password: string = '';
 
   constructor(private toastr: ToastrService, private _userService: UserService,
@@ -23,7 +23,7 @@ export class AuthPage  {
 
     //Validamos que el usuario ingrese datos
 
-    if(this.email == '' || this.password == ''){
+    if(this.correo == '' || this.password == ''){
       this.toastr.warning('Todos los campos son obligatorios', 'Campos vacíos');
       return;
     }
@@ -32,7 +32,7 @@ export class AuthPage  {
 
     const user: User= {
       id:0,
-      email: this.email,
+      correo: this.correo,
       password: this.password,
     }
 

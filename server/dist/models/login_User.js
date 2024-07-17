@@ -12,19 +12,19 @@ exports.User = connection_1.default.define('user', {
         primaryKey: true,
         autoIncrement: true
     },
-    nombre: {
+    username: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    apellido: {
+    last_name: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    edad: {
+    age: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
     },
-    correo: {
+    email: {
         type: sequelize_1.DataTypes.STRING,
         unique: true,
     },
@@ -32,16 +32,16 @@ exports.User = connection_1.default.define('user', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    domicilio: {
+    address: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    telefono: {
+    tel: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
     }
 }, {
-    timestamps: false,
-    tableName: 'Usuario'
+    createdAt: false,
+    updatedAt: false
 });
 exports.default = exports.User;
