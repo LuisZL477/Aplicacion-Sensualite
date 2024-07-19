@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Carrito de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let product of cartItems">
+      <ion-thumbnail slot="start">
+        <img [src]="'http://localhost:3000/uploads/' + product.imagen" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ product.nombre }}</h2>
+        <p>{{ product.precio | currency }}</p>
+        <ion-button fill="outline" color="danger" (click)="removeFromCart(product)">
+          <ion-icon slot="start" name="trash"></ion-icon>
+          Eliminar
+        </ion-button>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
