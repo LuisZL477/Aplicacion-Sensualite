@@ -1,47 +1,51 @@
+<!-- src/app/pages/dashboard/dashboard.page.html -->
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
-        </ion-buttons>
-
-        <ion-title class="ion-text-center">Catálogo</ion-title>
-
-        <ion-buttons slot="end">
-            <ion-button class="ion-margin-top custom-button" (click)="logout()" mode="ios">
-                Salir
-                <ion-icon slot="end" name="log-out-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
+      <ion-buttons slot="start">
+        <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
+      </ion-buttons>
+  
+      <ion-title class="ion-text-center">Catálogo</ion-title>
+  
+      <ion-buttons slot="end">
+        <ion-button (click)="goToCart()">
+          <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+        </ion-button>
+        <ion-button class="ion-margin-top custom-button" (click)="logout()" mode="ios">
+            Salir
+            <ion-icon slot="end" name="log-out-outline"></ion-icon>
+          </ion-button>
+      </ion-buttons>
     </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+  </ion-header>
+  
+  <ion-content [fullscreen]="true">
     <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">dashboard</ion-title>
-        </ion-toolbar>
+      <ion-toolbar>
+        <ion-title size="large">dashboard</ion-title>
+      </ion-toolbar>
     </ion-header>
-
+  
     <ion-grid>
-        <ion-row class="ion-align-items-stretch">
-            <ion-col size="12" size-md="6" size-lg="4" *ngFor="let product of listProduct">
-                <ion-card class="product-card">
-                    <ion-card-header>
-                        <ion-card-title>{{ product.nombre }}</ion-card-title>
-                        <ion-card-subtitle><strong>Categoría:</strong> {{ product.tipo }}</ion-card-subtitle>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <img [src]="'http://localhost:3000/uploads/' + product.imagen" alt="{{ product.nombre }}" class="product-image" />
-                        <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
-                        <p><strong>Precio:</strong> {{ product.precio | currency }}</p>
-                        <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
-                        <p>
-                            <ion-icon slot="end" name="cart-outline" size="large"></ion-icon>
-                        </p>
-
-                    </ion-card-content>
-                </ion-card>
-            </ion-col>
-        </ion-row>
+      <ion-row class="ion-align-items-stretch">
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let product of listProduct">
+          <ion-card class="product-card">
+            <ion-card-header>
+              <ion-card-title>{{ product.nombre }}</ion-card-title>
+              <ion-card-subtitle><strong>Categoría:</strong> {{ product.tipo }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <img [src]="'http://localhost:3000/uploads/' + product.imagen" alt="{{ product.nombre }}" class="product-image" />
+              <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
+              <p><strong>Precio:</strong> {{ product.precio | currency }}</p>
+              <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
+              <p>
+                <ion-icon slot="end" name="cart-outline" size="large" (click)="addToCart(product, $event)"></ion-icon>
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
     </ion-grid>
-</ion-content>
+  </ion-content>
+  

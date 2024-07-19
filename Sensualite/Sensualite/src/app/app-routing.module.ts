@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/dashboard/dashboard.module').then(m => m.DashboardPageModule)
   },
   {
+    path: 'cart',
+    loadChildren: () => import('./pages/auth/cart/cart.module').then(m => m.CartPageModule)
+  },
+  {
     path: '**',
     redirectTo: 'auth',
     pathMatch: 'full'
