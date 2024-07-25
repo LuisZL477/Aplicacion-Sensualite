@@ -1,8 +1,8 @@
-// src/app/services/cart.service.ts
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from '../interfaces/product';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,18 @@ import { Product } from '../interfaces/product';
 export class CartService {
   private cart = new BehaviorSubject<Product[]>([]);
   cart$ = this.cart.asObservable();
+  private apiUrl = environment.endpoint;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   addToCart(product: Product) {
     const currentCart = this.cart.value;
-    
-    // Verificar si el producto ya está en el carrito por su ID
     const productExists = currentCart.some(item => item.id === product.id);
 
     if (!productExists) {
       this.cart.next([...currentCart, product]);
     } else {
       console.log(`El producto ${product.nombre} ya está en el carrito.`);
-      // Puedes emitir un mensaje, lanzar una alerta, o manejarlo como necesites
     }
   }
 
@@ -39,5 +37,16 @@ export class CartService {
 
   clearCart() {
     this.cart.next([]);
+  }
+
+  buyProduct(product: Product) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Asegúrate de que la URL sea correcta
+    return this.http.post(`${this.apiUrl}api/products/buy`, { productId: product.id }, { headers });
   }
 }

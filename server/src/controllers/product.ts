@@ -3,23 +3,54 @@ import { Product } from '../models/product';
 
 // Obtener todos los productos
 export const getProducts = async (req: Request, res: Response) => {
-  const listProducts = await Product.findAll();
-  res.json(listProducts);
+  try {
+    const listProducts = await Product.findAll();
+    res.json(listProducts);
+  } catch (error) {
+    res.status(500).json({ msg: 'Error al obtener los productos', error });
+  }
 };
 
 // Obtener un producto por id
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const product = await Product.findByPk(id);
+  try {
+    const product = await Product.findByPk(id);
 
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).json({
-      msg: `No existe un producto con el id ${id}`
-    });
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ msg: `No existe un producto con el id ${id}` });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: 'Error al obtener el producto', error });
   }
 };
+
+// Comprar un producto
+export const buyProduct = async (req: Request, res: Response) => {
+  const { productId } = req.body;
+
+  try {
+    const product = await Product.findByPk(productId);
+
+    if (!product) {
+      return res.status(404).json({ msg: `No existe un producto con el id ${productId}` });
+    }
+
+    if (product.existencia > 0) {
+      product.existencia -= 1;
+      await product.save();
+      res.json({ msg: 'Compra realizada con éxito', product });
+    } else {
+      res.status(400).json({ msg: 'El producto está agotado' });
+    }
+  } catch (error) {
+    console.error('Error al comprar el producto:', error);
+    res.status(500).json({ msg: 'Error interno del servidor', error });
+  }
+};
+
 
 // // Eliminar un producto por id
 // export const deleteProducts = async (req: Request, res: Response) => {

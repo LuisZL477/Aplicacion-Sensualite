@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import {  getProduct, getProducts} from '../controllers/product';
+import { getProduct, getProducts, buyProduct } from '../controllers/product';
 import validateToken from './validate-token';
 
 const router = Router();
+
 router.get('/', validateToken, getProducts);
 router.get('/:id', validateToken, getProduct);
+router.post('/buy', validateToken, buyProduct);
+
+
 // router.delete('/:id', validateToken, deleteProducts);
 // router.post('/', validateToken, upload.single('imagen'), postProduct);
 // router.put('/:id', validateToken, upload.single('imagen'), updateProduct);

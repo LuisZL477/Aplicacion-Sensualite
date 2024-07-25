@@ -15,10 +15,16 @@
       </ion-thumbnail>
       <ion-label>
         <h2>{{ product.nombre }}</h2>
-        <p>{{ product.precio | currency }}</p>
+        <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
+        <p><strong>Precio:</strong>{{ product.precio | currency }}</p>
+        <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
         <ion-button fill="outline" color="danger" (click)="removeFromCart(product)">
           <ion-icon slot="start" name="trash"></ion-icon>
           Eliminar
+        </ion-button>
+        <ion-button fill="outline" color="success" (click)="buyProduct(product)">
+          <ion-icon slot="start" name="cart"></ion-icon>
+          Comprar
         </ion-button>
       </ion-label>
     </ion-item>
