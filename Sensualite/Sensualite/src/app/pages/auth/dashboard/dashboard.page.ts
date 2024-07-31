@@ -13,14 +13,16 @@ import { ToastrService } from 'ngx-toastr';
 export class DashboardPage implements OnInit {
   listProduct: Product[] = [];
   loading: boolean = false;
+  animatingIcons = new Set<number>();
 
   constructor(
     private router: Router,
     private _productService: ProductService,
     private _cartService: CartService,
     private toastr: ToastrService,
-    private renderer: Renderer2
-  ) { }
+    private renderer: Renderer2,
+  ) {
+   }
 
   ngOnInit() {
     this.getProducts();
@@ -41,7 +43,11 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/cart']);
   }
 
-  addToCart(product: Product, event: Event) {
+  addToCart(product: Product, event: MouseEvent, index: number) {
+    if (this.animatingIcons.has(index)) return;
+
+    this.animatingIcons.add(index);
+    setTimeout(() => this.animatingIcons.delete(index), 300);
     this._cartService.addToCart(product);
     this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
 
@@ -49,6 +55,9 @@ export class DashboardPage implements OnInit {
     if (buttonElement) {
       this.animateCartButton(buttonElement);
     }
+  }
+  isIconAnimating(index: number): boolean {
+    return this.animatingIcons.has(index);
   }
 
   animateCartButton(buttonElement: HTMLElement) {

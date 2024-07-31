@@ -1,38 +1,80 @@
-@media (prefers-color-scheme: dark) {
-    .custom-button {
-        --border-color: white;
-        color: rgb(255, 255, 255);
-        /* Contorno blanco en modo oscuro */
-    }
+/* General iOS-style container */
+
+.container {
+    padding: 20px;
 }
 
 
-/* Estilos para modo claro */
-
-@media (prefers-color-scheme: light) {
-    .custom-button {
-        --border-color: black;
-        color: black;
-        /* Contorno negro en modo claro */
-    }
-}
-
-.shield-icon {
-    width: 60px;
-    height: 60px;
-}
-
-.ion-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: auto;
-    /* optional, adjust as needed */
-}
+/* Card styling */
 
 .product-card {
-    height: 100%;
+    border-radius: 15px;
+    /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    overflow: hidden;
+    /* Hide overflow for rounded effect */
+    transition: transform 0.3s ease;
+    /* Smooth transition on hover */
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+    /* Slightly enlarge on hover */
+}
+
+
+/* Card content styling */
+
+.product-image {
+    border-radius: 15px 15px 0 0;
+    /* Rounded top corners */
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+
+/* iOS-style buttons */
+
+ion-button {
+    border-radius: 12px;
+    /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+ion-button:hover {
+    background-color: #f2f2f7;
+    /* Light grey on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Stronger shadow on hover */
+}
+
+
+/* Cart icon styling */
+
+.cart-icon-animation {
+    animation: cart-click-animation 0.3s ease-in-out;
+}
+
+
+/* Define cart icon animation */
+
+@keyframes cart-click-animation {
+    0% {
+        transform: scale(1);
+        color: initial;
+    }
+    50% {
+        transform: scale(1.2);
+        color: rgb(255, 0, 212);
+    }
+    100% {
+        transform: scale(1);
+        color: initial;
+    }
 }
 
 .product-image {
