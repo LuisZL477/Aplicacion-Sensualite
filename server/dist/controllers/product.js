@@ -41,19 +41,22 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getProduct = getProduct;
 // Comprar un producto
 const buyProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { productId } = req.body;
+    const { productId, quantity } = req.body;
+    if (!quantity || quantity <= 0) {
+        return res.status(400).json({ msg: 'La cantidad debe ser un número positivo' });
+    }
     try {
         const product = yield product_1.Product.findByPk(productId);
         if (!product) {
             return res.status(404).json({ msg: `No existe un producto con el id ${productId}` });
         }
-        if (product.existencia > 0) {
-            product.existencia -= 1;
+        if (product.existencia >= quantity) {
+            product.existencia -= quantity;
             yield product.save();
-            res.json({ msg: 'Compra realizada con éxito', product });
+            res.json({ msg: `Compra realizada con éxito de ${quantity} unidad(es)`, product });
         }
         else {
-            res.status(400).json({ msg: 'El producto está agotado' });
+            res.status(400).json({ msg: 'Stock insuficiente' });
         }
     }
     catch (error) {

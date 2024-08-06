@@ -5,5 +5,6 @@ export interface Product{
     precio: number,
     descripcion: string,
     existencia: number,
-    imagen: Blob
+    imagen: Blob,
+    quantity?: number;
 }

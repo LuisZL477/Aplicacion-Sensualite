@@ -19,25 +19,32 @@ export class CartPage implements OnInit {
     });
   }
 
+  getQuantities(product: Product): number[] {
+    return Array.from({ length: product.existencia }, (_, i) => i + 1);
+  }
+
   removeFromCart(product: Product) {
     this._cartService.removeFromCart(product);
   }
 
   buyProduct(product: Product) {
-    if (product.existencia > 0) {
-      this._cartService.buyProduct(product).subscribe(response => {
-        // Actualización local después de confirmar la compra
-        product.existencia--;  // Reducir localmente el stock
+    const quantity = product.quantity || 1; // Default to 1 if not selected
+  
+    if (product.existencia >= quantity) {
+      this._cartService.buyProduct(product, quantity).subscribe(response => {
+        product.existencia -= quantity;  // Reducir localmente el stock
         if (product.existencia === 0) {
           this.removeFromCart(product);  // Eliminar del carrito si ya no hay más en existencia
         }
-        this.toastr.success(`Has comprado ${product.nombre}`);
+        this.toastr.success(`Has comprado ${quantity} de ${product.nombre}`);
       }, error => {
         console.error('Error al comprar el producto:', error);
         alert('Ocurrió un error al procesar tu compra: ' + error.error.msg);
       });
     } else {
-      this.toastr.warning(`El producto ${product.nombre} está agotado`);
+      this.toastr.warning(`El producto ${product.nombre} no tiene suficiente stock`);
     }
   }
+  
+
 }

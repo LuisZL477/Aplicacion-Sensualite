@@ -18,6 +18,9 @@
         <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
         <p><strong>Precio:</strong>{{ product.precio | currency }}</p>
         <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
+        <ion-select placeholder="Cantidad" [(ngModel)]="product.quantity" interface="popover">
+          <ion-select-option *ngFor="let qty of getQuantities(product)" [value]="qty">{{ qty }}</ion-select-option>
+        </ion-select>
         <ion-button fill="outline" color="danger" (click)="removeFromCart(product)">
           <ion-icon slot="start" name="trash"></ion-icon>
           Eliminar

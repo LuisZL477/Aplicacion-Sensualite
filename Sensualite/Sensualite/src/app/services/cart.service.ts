@@ -39,14 +39,14 @@ export class CartService {
     this.cart.next([]);
   }
 
-  buyProduct(product: Product) {
+  buyProduct(product: Product, quantity: number) {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-
-    // Asegúrate de que la URL sea correcta
-    return this.http.post(`${this.apiUrl}api/products/buy`, { productId: product.id }, { headers });
+  
+    return this.http.post(`${this.apiUrl}api/products/buy`, { productId: product.id, quantity }, { headers });
   }
+  
 }
