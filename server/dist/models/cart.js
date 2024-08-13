@@ -29,6 +29,7 @@ Cart.init({
     sequelize: connection_1.default,
     modelName: 'Cart',
     tableName: 'carritos',
+    timestamps: false
 });
 class CartItem extends sequelize_1.Model {
 }
@@ -43,7 +44,7 @@ CartItem.init({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Cart,
+            model: Cart, // Asegúrate de usar el nombre correcto del modelo aquí
             key: 'id'
         }
     },

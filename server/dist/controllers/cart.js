@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addToCart = void 0;
+exports.getCartItems = exports.addToCart = void 0;
 const cart_1 = require("../models/cart");
+const product_1 = require("../models/product");
 const addToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId; // Obtenido del token
     const { productId, quantity } = req.body;
@@ -37,7 +38,7 @@ const addToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         if (cartItem) {
             // Si el producto ya está en el carrito, actualizar la cantidad
-            cartItem.quantity += quantity; // Asegúrate de que quantity es un número
+            cartItem.quantity += quantity;
             yield cartItem.save();
         }
         else {
@@ -61,3 +62,26 @@ const addToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.addToCart = addToCart;
+const getCartItems = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    try {
+        // Obtener el carrito del usuario
+        const cart = yield cart_1.Cart.findOne({
+            where: { userId: userId },
+            include: [{ model: cart_1.CartItem, include: [product_1.Product] }]
+        });
+        if (!cart) {
+            return res.status(404).json({
+                msg: 'Carrito no encontrado'
+            });
+        }
+        res.status(200).json(cart);
+    }
+    catch (error) {
+        console.error('Error al obtener el carrito:', error);
+        res.status(500).json({
+            msg: 'Ocurrió un error al obtener el carrito'
+        });
+    }
+});
+exports.getCartItems = getCartItems;

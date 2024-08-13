@@ -33,6 +33,7 @@ Cart.init({
     sequelize,
     modelName: 'Cart',
     tableName: 'carritos',
+    timestamps: false
 });
 
 interface CartItemAttributes {
@@ -61,7 +62,7 @@ CartItem.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Cart,
+            model: Cart, // Asegúrate de usar el nombre correcto del modelo aquí
             key: 'id'
         }
     },
@@ -90,4 +91,3 @@ Cart.hasMany(CartItem, { foreignKey: 'cartId' });
 CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
 
 export { Cart, CartItem };
-

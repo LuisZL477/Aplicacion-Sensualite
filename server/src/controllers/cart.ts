@@ -34,7 +34,7 @@ export const addToCart = async (req: Request, res: Response) => {
 
         if (cartItem) {
             // Si el producto ya está en el carrito, actualizar la cantidad
-            cartItem.quantity += quantity;  // Asegúrate de que quantity es un número
+            cartItem.quantity += quantity;
             await cartItem.save();
         } else {
             // Si el producto no está en el carrito, agregarlo
@@ -56,5 +56,30 @@ export const addToCart = async (req: Request, res: Response) => {
             msg: 'Ocurrió un error al agregar el producto al carrito'
         });
     }
-}
+};
 
+export const getCartItems = async (req: Request, res: Response) => {
+    const userId = req.userId;
+
+    try {
+        // Obtener el carrito del usuario
+        const cart = await Cart.findOne({
+            where: { userId: userId },
+            include: [{ model: CartItem, include: [Product] }]
+        });
+
+        if (!cart) {
+            return res.status(404).json({
+                msg: 'Carrito no encontrado'
+            });
+        }
+
+        res.status(200).json(cart);
+
+    } catch (error) {
+        console.error('Error al obtener el carrito:', error);
+        res.status(500).json({
+            msg: 'Ocurrió un error al obtener el carrito'
+        });
+    }
+};

@@ -7,5 +7,6 @@ const express_1 = require("express");
 const validate_token_1 = __importDefault(require("./validate-token"));
 const cart_1 = require("../controllers/cart");
 const router = (0, express_1.Router)();
-router.post('/', validate_token_1.default, cart_1.addToCart); // Ruta actualizada
+router.post('/', validate_token_1.default, cart_1.addToCart); // Ruta para agregar al carrito
+router.get('/', validate_token_1.default, cart_1.getCartItems); // Ruta para obtener los items del carrito
 exports.default = router;
