@@ -10,12 +10,13 @@ const validateToken = (req, res, next) => {
         // Tiene token
         try {
             const bearerToken = headerToken.slice(7);
-            jsonwebtoken_1.default.verify(bearerToken, process.env.SECRET_KEY || 'pepito123');
+            const decoded = jsonwebtoken_1.default.verify(bearerToken, process.env.SECRET_KEY || 'pepito123');
+            req.userId = decoded.id; // Almacenar el id del usuario en req para usarlo en otras funciones
             next();
         }
         catch (error) {
             res.status(401).json({
-                msg: 'token no válido'
+                msg: 'Token no válido'
             });
         }
     }

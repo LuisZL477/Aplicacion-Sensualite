@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 
 
-const sequelize = new Sequelize('sensualite','root','BMW&2502@',{
+const sequelize = new Sequelize('sensualite','root','',{
     host:'localhost',
     port: 3306,
     dialect: 'mysql',

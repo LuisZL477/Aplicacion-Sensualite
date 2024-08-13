@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product';
 import { environment } from '../../environments/environment';
 
@@ -8,45 +8,36 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class CartService {
-  private cart = new BehaviorSubject<Product[]>([]);
-  cart$ = this.cart.asObservable();
-  private apiUrl = environment.endpoint;
+  private apiUrl: string;
+  private cartApiUrl: string;
 
-  constructor(private http: HttpClient) { }
-
-  addToCart(product: Product) {
-    const currentCart = this.cart.value;
-    const productExists = currentCart.some(item => item.id === product.id);
-
-    if (!productExists) {
-      this.cart.next([...currentCart, product]);
-    } else {
-      console.log(`El producto ${product.nombre} ya está en el carrito.`);
-    }
+  constructor(private http: HttpClient) {
+    this.apiUrl = environment.endpoint;
+    this.cartApiUrl = 'api/carts/'; // Asegúrate de que coincida con la configuración del backend
   }
 
-  getCartItems() {
-    return this.cart.asObservable();
-  }
-
-  removeFromCart(product: Product) {
-    const currentCart = this.cart.value;
-    const updatedCart = currentCart.filter(item => item.id !== product.id);
-    this.cart.next(updatedCart);
-  }
-
-  clearCart() {
-    this.cart.next([]);
-  }
-
-  buyProduct(product: Product, quantity: number) {
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
+    return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-  
-    return this.http.post(`${this.apiUrl}api/products/buy`, { productId: product.id, quantity }, { headers });
   }
-  
+
+  getCartItems(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}${this.cartApiUrl}`, { headers: this.getHeaders() });
+  }
+
+  removeFromCart(product: Product): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}${this.cartApiUrl}${product.id}`, { headers: this.getHeaders() });
+  }
+
+  buyProduct(product: Product, quantity: number): Observable<any> {
+    const headers = this.getHeaders().set('Content-Type', 'application/json');
+    return this.http.post<any>(`${this.apiUrl}api/products/buy`, { productId: product.id, quantity }, { headers });
+  }
+
+  addToCart(product: Product): Observable<any> {
+    const headers = this.getHeaders().set('Content-Type', 'application/json');
+    return this.http.post<any>(`${this.apiUrl}${this.cartApiUrl}`, { productId: product.id }, { headers });
+  }
 }

@@ -21,8 +21,7 @@ export class DashboardPage implements OnInit {
     private _cartService: CartService,
     private toastr: ToastrService,
     private renderer: Renderer2,
-  ) {
-   }
+  ) { }
 
   ngOnInit() {
     this.getProducts();
@@ -43,33 +42,43 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/cart']);
   }
 
+  // Añadir un producto al carrito
   addToCart(product: Product, event: MouseEvent, index: number) {
     if (this.animatingIcons.has(index)) return;
 
     this.animatingIcons.add(index);
-    setTimeout(() => this.animatingIcons.delete(index), 300);
-    this._cartService.addToCart(product);
-    this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
 
-    const buttonElement = (event.currentTarget as HTMLElement).querySelector('ion-icon');
-    if (buttonElement) {
-      this.animateCartButton(buttonElement);
-    }
+    this._cartService.addToCart(product).subscribe(
+      () => {
+        this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
+        this.animateCartButton(event.currentTarget as HTMLElement);
+      },
+      (error) => {
+        console.error('Error al añadir el producto al carrito:', error);
+        this.toastr.error('Ocurrió un error al añadir el producto al carrito.');
+      }
+    );
+
+    setTimeout(() => this.animatingIcons.delete(index), 300);
   }
+
   isIconAnimating(index: number): boolean {
     return this.animatingIcons.has(index);
   }
 
   animateCartButton(buttonElement: HTMLElement) {
-    this.renderer.addClass(buttonElement, 'animate__animated');
-    this.renderer.addClass(buttonElement, 'animate__bounce');
+    const iconElement = buttonElement.querySelector('ion-icon');
+    if (iconElement) {
+      this.renderer.addClass(iconElement, 'animate__animated');
+      this.renderer.addClass(iconElement, 'animate__bounce');
 
-    buttonElement.addEventListener('animationend', () => {
-      this.renderer.removeClass(buttonElement, 'animate__animated');
-      this.renderer.removeClass(buttonElement, 'animate__bounce');
-    }, { once: true });
+      iconElement.addEventListener('animationend', () => {
+        this.renderer.removeClass(iconElement, 'animate__animated');
+        this.renderer.removeClass(iconElement, 'animate__bounce');
+      }, { once: true });
+    }
   }
-  
+
   logout() {
     // Elimina el token del local storage
     localStorage.removeItem('token');

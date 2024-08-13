@@ -67,6 +67,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // Generamos token
     const token = jsonwebtoken_1.default.sign({
+        id: user.id,
         correo: correo
     }, process.env.SECRET_KEY || 'pepito123');
     res.json(token);
