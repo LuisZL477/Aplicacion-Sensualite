@@ -43,41 +43,80 @@ export class DashboardPage implements OnInit {
   }
 
   // Añadir un producto al carrito
-  addToCart(product: Product, event: MouseEvent, index: number) {
-    if (this.animatingIcons.has(index)) return;
+  // addToCart(product: Product, event: MouseEvent, index: number) {
+  //   if (this.animatingIcons.has(index)) return;
 
-    this.animatingIcons.add(index);
+  //   this.animatingIcons.add(index);
 
-    this._cartService.addToCart(product).subscribe(
-      () => {
-        this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
-        this.animateCartButton(event.currentTarget as HTMLElement);
-      },
-      (error) => {
-        console.error('Error al añadir el producto al carrito:', error);
-        this.toastr.error('Ocurrió un error al añadir el producto al carrito.');
-      }
-    );
+  //   this._cartService.addToCart(product).subscribe(
+  //     () => {
+  //       this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
+  //       this.animateCartButton(event.currentTarget as HTMLElement);
+  //     },
+  //     (error) => {
+  //       console.error('Error al añadir el producto al carrito:', error);
+  //       this.toastr.error('Ocurrió un error al añadir el producto al carrito.');
+  //     }
+  //   );
 
-    setTimeout(() => this.animatingIcons.delete(index), 300);
-  }
+  //   setTimeout(() => this.animatingIcons.delete(index), 300);
+  // }
 
-  isIconAnimating(index: number): boolean {
-    return this.animatingIcons.has(index);
-  }
+  // isIconAnimating(index: number): boolean {
+  //   return this.animatingIcons.has(index);
+  // }
+
+  // animateCartButton(buttonElement: HTMLElement) {
+  //   const iconElement = buttonElement.querySelector('ion-icon');
+  //   if (iconElement) {
+  //     this.renderer.addClass(iconElement, 'animate__animated');
+  //     this.renderer.addClass(iconElement, 'animate__bounce');
+
+  //     iconElement.addEventListener('animationend', () => {
+  //       this.renderer.removeClass(iconElement, 'animate__animated');
+  //       this.renderer.removeClass(iconElement, 'animate__bounce');
+  //     }, { once: true });
+  //   }
+  // }
 
   animateCartButton(buttonElement: HTMLElement) {
     const iconElement = buttonElement.querySelector('ion-icon');
     if (iconElement) {
       this.renderer.addClass(iconElement, 'animate__animated');
       this.renderer.addClass(iconElement, 'animate__bounce');
-
+  
       iconElement.addEventListener('animationend', () => {
         this.renderer.removeClass(iconElement, 'animate__animated');
         this.renderer.removeClass(iconElement, 'animate__bounce');
       }, { once: true });
     }
   }
+  
+
+  addToCart(product: Product, event: MouseEvent, index: number) {
+    if (this.animatingIcons.has(index)) return;
+  
+    this.animatingIcons.add(index);
+  
+    this._cartService.addToCart(product, 1).subscribe(
+      () => {
+        this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
+  
+        // Asegúrate de que `event.currentTarget` es un HTMLElement
+        const target = event.currentTarget as HTMLElement;
+        if (target) {
+          this.animateCartButton(target);
+        }
+      },
+      (error) => {
+        console.error('Error al añadir el producto al carrito:', error);
+        this.toastr.error('Ocurrió un error al añadir el producto al carrito.');
+      }
+    );
+  
+    setTimeout(() => this.animatingIcons.delete(index), 300);
+  }
+    
 
   logout() {
     // Elimina el token del local storage

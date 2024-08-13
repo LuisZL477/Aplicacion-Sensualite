@@ -36,8 +36,8 @@ export class CartService {
     return this.http.post<any>(`${this.apiUrl}api/products/buy`, { productId: product.id, quantity }, { headers });
   }
 
-  addToCart(product: Product): Observable<any> {
+  addToCart(product: Product, quantity: number = 1): Observable<any> {
     const headers = this.getHeaders().set('Content-Type', 'application/json');
-    return this.http.post<any>(`${this.apiUrl}${this.cartApiUrl}`, { productId: product.id }, { headers });
-  }
+    return this.http.post<any>(`${this.apiUrl}${this.cartApiUrl}`, { productId: product.id, quantity }, { headers });
+  }  
 }

@@ -27,7 +27,8 @@ Cart.init({
     }
 }, {
     sequelize: connection_1.default,
-    modelName: 'Carrito',
+    modelName: 'Cart',
+    tableName: 'carritos',
 });
 class CartItem extends sequelize_1.Model {
 }
@@ -61,8 +62,9 @@ CartItem.init({
     }
 }, {
     sequelize: connection_1.default,
-    modelName: 'CarritoCompras',
-    timestamps: true
+    modelName: 'CartItem',
+    tableName: 'carrito_compras',
+    timestamps: false
 });
 // Relaciones
 Cart.hasMany(CartItem, { foreignKey: 'cartId' });

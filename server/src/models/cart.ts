@@ -3,7 +3,6 @@ import sequelize from '../db/connection';
 import User from './user';
 import { Product } from './product';
 
-// Definir interfaces para los atributos de Cart y CartItem
 interface CartAttributes {
     id: number;
     userId: number;
@@ -32,7 +31,8 @@ Cart.init({
     }
 }, {
     sequelize,
-    modelName: 'Carrito',
+    modelName: 'Cart',
+    tableName: 'carritos',
 });
 
 interface CartItemAttributes {
@@ -80,8 +80,9 @@ CartItem.init({
     }
 }, {
     sequelize,
-    modelName: 'CarritoCompras',
-    timestamps: true
+    modelName: 'CartItem',
+    tableName: 'carrito_compras',
+    timestamps: false
 });
 
 // Relaciones
@@ -89,3 +90,4 @@ Cart.hasMany(CartItem, { foreignKey: 'cartId' });
 CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
 
 export { Cart, CartItem };
+
