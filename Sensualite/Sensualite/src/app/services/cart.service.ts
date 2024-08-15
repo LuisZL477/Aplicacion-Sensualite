@@ -23,8 +23,8 @@ export class CartService {
     });
   }
 
-  getCartItems(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}${this.cartApiUrl}`, { headers: this.getHeaders() });
+  getCartItems(): Observable<{ product: Product, quantity: number }[]> {
+    return this.http.get<{ product: Product, quantity: number }[]>(`${this.apiUrl}${this.cartApiUrl}`, { headers: this.getHeaders() });
   }
 
   removeFromCart(product: Product): Observable<void> {

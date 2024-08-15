@@ -1,35 +1,35 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/dashboard"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Carrito de Compras</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/dashboard"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Carrito de Compras</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor="let product of cartItems">
-      <ion-thumbnail slot="start">
-        <img [src]="'http://localhost:3000/uploads/' + product.imagen" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ product.nombre }}</h2>
-        <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
-        <p><strong>Precio:</strong>{{ product.precio | currency }}</p>
-        <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
-        <ion-select placeholder="Cantidad" [(ngModel)]="product.quantity" interface="popover">
-          <ion-select-option *ngFor="let qty of getQuantities(product)" [value]="qty">{{ qty }}</ion-select-option>
-        </ion-select>
-        <ion-button fill="outline" color="danger" (click)="removeFromCart(product)">
-          <ion-icon slot="start" name="trash"></ion-icon>
-          Eliminar
-        </ion-button>
-        <ion-button fill="outline" color="success" (click)="buyProduct(product)">
-          <ion-icon slot="start" name="cart"></ion-icon>
-          Comprar
-        </ion-button>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-list>
+        <ion-item *ngFor="let item of cartItems">
+            <ion-thumbnail slot="start">
+                <img [src]="'http://localhost:3000/uploads/' + item.product.imagen" />
+            </ion-thumbnail>
+            <ion-label>
+                <h2>{{ item.product.nombre }}</h2>
+                <p><strong>Descripción:</strong> {{ item.product.descripcion }}</p>
+                <p><strong>Precio:</strong>{{ item.product.precio | currency }}</p>
+                <p><strong>Disponibles:</strong> {{ item.product.existencia }}</p>
+                <ion-select placeholder="Cantidad" [(ngModel)]="item.quantity" interface="popover">
+                    <ion-select-option *ngFor="let qty of getQuantities(item.product)" [value]="qty">{{ qty }}</ion-select-option>
+                </ion-select>
+                <ion-button fill="outline" color="danger" (click)="removeFromCart(item)">
+                    <ion-icon slot="start" name="trash"></ion-icon>
+                    Eliminar
+                </ion-button>
+                <ion-button fill="outline" color="success" (click)="buyProduct(item)">
+                    <ion-icon slot="start" name="cart"></ion-icon>
+                    Comprar
+                </ion-button>
+            </ion-label>
+        </ion-item>
+    </ion-list>
 </ion-content>

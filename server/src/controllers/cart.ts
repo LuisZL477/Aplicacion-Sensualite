@@ -62,10 +62,16 @@ export const getCartItems = async (req: Request, res: Response) => {
     const userId = req.userId;
 
     try {
-        // Obtener el carrito del usuario
         const cart = await Cart.findOne({
             where: { userId: userId },
-            include: [{ model: CartItem, include: [Product] }]
+            include: [{
+                model: CartItem,
+                as: 'items',
+                include: [{
+                    model: Product,
+                    as: 'product'
+                }]
+            }]
         });
 
         if (!cart) {
@@ -74,7 +80,8 @@ export const getCartItems = async (req: Request, res: Response) => {
             });
         }
 
-        res.status(200).json(cart);
+        // Wrap the cart items in a 'data' field
+        res.status(200).json({ data: cart });
 
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
@@ -83,3 +90,4 @@ export const getCartItems = async (req: Request, res: Response) => {
         });
     }
 };
+

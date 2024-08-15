@@ -7,7 +7,7 @@ exports.CartItem = exports.Cart = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 const user_1 = __importDefault(require("./user"));
-const product_1 = require("./product");
+const product_1 = require("./product"); // Asegúrate de que Product esté correctamente importado
 class Cart extends sequelize_1.Model {
 }
 exports.Cart = Cart;
@@ -44,7 +44,7 @@ CartItem.init({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Cart, // Asegúrate de usar el nombre correcto del modelo aquí
+            model: Cart,
             key: 'id'
         }
     },
@@ -52,7 +52,7 @@ CartItem.init({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: product_1.Product,
+            model: product_1.Product, // Asegúrate de que esta referencia sea correcta
             key: 'id'
         }
     },
@@ -67,6 +67,8 @@ CartItem.init({
     tableName: 'carrito_compras',
     timestamps: false
 });
-// Relaciones
-Cart.hasMany(CartItem, { foreignKey: 'cartId' });
-CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
+// Definición de relaciones entre los modelos
+Cart.hasMany(CartItem, { foreignKey: 'cartId', as: 'items' });
+CartItem.belongsTo(Cart, { foreignKey: 'cartId', as: 'cart' });
+product_1.Product.hasMany(CartItem, { foreignKey: 'productId', as: 'cartItems' });
+CartItem.belongsTo(product_1.Product, { foreignKey: 'productId', as: 'product' });

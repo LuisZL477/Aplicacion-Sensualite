@@ -65,17 +65,24 @@ exports.addToCart = addToCart;
 const getCartItems = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
     try {
-        // Obtener el carrito del usuario
         const cart = yield cart_1.Cart.findOne({
             where: { userId: userId },
-            include: [{ model: cart_1.CartItem, include: [product_1.Product] }]
+            include: [{
+                    model: cart_1.CartItem,
+                    as: 'items',
+                    include: [{
+                            model: product_1.Product,
+                            as: 'product'
+                        }]
+                }]
         });
         if (!cart) {
             return res.status(404).json({
                 msg: 'Carrito no encontrado'
             });
         }
-        res.status(200).json(cart);
+        // Wrap the cart items in a 'data' field
+        res.status(200).json({ data: cart });
     }
     catch (error) {
         console.error('Error al obtener el carrito:', error);

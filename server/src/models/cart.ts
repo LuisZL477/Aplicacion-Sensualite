@@ -1,8 +1,9 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../db/connection';
 import User from './user';
-import { Product } from './product';
+import { Product } from './product';  // Asegúrate de que Product esté correctamente importado
 
+// Definición del modelo Cart
 interface CartAttributes {
     id: number;
     userId: number;
@@ -36,6 +37,7 @@ Cart.init({
     timestamps: false
 });
 
+// Definición del modelo CartItem
 interface CartItemAttributes {
     id: number;
     cartId: number;
@@ -62,7 +64,7 @@ CartItem.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Cart, // Asegúrate de usar el nombre correcto del modelo aquí
+            model: Cart,
             key: 'id'
         }
     },
@@ -70,7 +72,7 @@ CartItem.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Product,
+            model: Product, // Asegúrate de que esta referencia sea correcta
             key: 'id'
         }
     },
@@ -86,8 +88,13 @@ CartItem.init({
     timestamps: false
 });
 
-// Relaciones
-Cart.hasMany(CartItem, { foreignKey: 'cartId' });
-CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
+// Definición de relaciones entre los modelos
+Cart.hasMany(CartItem, { foreignKey: 'cartId', as: 'items' });
+CartItem.belongsTo(Cart, { foreignKey: 'cartId', as: 'cart' });
+
+Product.hasMany(CartItem, { foreignKey: 'productId', as: 'cartItems' });
+CartItem.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
 
 export { Cart, CartItem };
+
+
