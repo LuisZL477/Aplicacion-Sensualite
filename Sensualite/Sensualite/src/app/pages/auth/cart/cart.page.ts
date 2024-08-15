@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../../services/cart.service';
 import { Product } from '../../../interfaces/product';
 import { ToastrService } from 'ngx-toastr';
-import { Response } from 'express';
 import { CartItem } from 'src/app/interfaces/CartItem';
 
 @Component({
@@ -16,36 +15,43 @@ export class CartPage implements OnInit {
   constructor(private _cartService: CartService, private toastr: ToastrService) { }
 
   ngOnInit() {
+    this.loadCartItems();  // Mueve la lógica de carga a un método separado
+  }
+
+  private loadCartItems() {
     this._cartService.getCartItems().subscribe(
       (response: any) => {
-        console.log('Respuesta del servidor:', response);
-        if (response.data && Array.isArray(response.data.items)) {
+        if (response.data && Array.isArray(response.data)) {
+          // Asumiendo que response.data es un array de items en sí mismo
+          this.cartItems = response.data.map((item: CartItem) => ({
+            product: item.product,
+            quantity: item.quantity,
+          }));
+        } else if (response.data && response.data.items && Array.isArray(response.data.items)) {
+          // Caso original donde los items están dentro de response.data.items
           this.cartItems = response.data.items.map((item: CartItem) => ({
             product: item.product,
             quantity: item.quantity,
           }));
         } else {
-          console.error('La respuesta no contiene un array en `data.items`');
+          console.error('La respuesta no contiene un array esperado');
+          this.cartItems = []; // Respaldo para evitar problemas posteriores
         }
       },
       (error) => {
         console.error('Error al obtener los productos del carrito:', error);
+        this.cartItems = []; // En caso de error, evita que cartItems quede indefinido
       }
     );
   }
-  
 
-
-  // Generar un array de cantidades disponibles basado en la existencia del producto
   getQuantities(product: Product): number[] {
     return Array.from({ length: product.existencia }, (_, i) => i + 1);
   }
 
-  // Eliminar producto del carrito
   removeFromCart(item: { product: Product; quantity: number }) {
-    this._cartService.removeFromCart(item.product).subscribe(
+    this._cartService.removeFromCart(item.product.id).subscribe(
       () => {
-        // Actualizar la lista de productos en el carrito después de eliminar
         this.cartItems = this.cartItems.filter(cartItem => cartItem.product.id !== item.product.id);
         this.toastr.success(`El producto ${item.product.nombre} ha sido eliminado del carrito.`);
       },
@@ -56,17 +62,16 @@ export class CartPage implements OnInit {
     );
   }
 
-  // Comprar producto
   buyProduct(item: { product: Product; quantity: number }) {
     const { product, quantity } = item;
-    const selectedQuantity = quantity || 1; // Default to 1 if not selected
+    const selectedQuantity = quantity || 1;
 
     if (product.existencia >= selectedQuantity) {
       this._cartService.buyProduct(product, selectedQuantity).subscribe(
         response => {
-          product.existencia -= selectedQuantity;  // Reducir localmente el stock
+          product.existencia -= selectedQuantity;
           if (product.existencia === 0) {
-            this.removeFromCart(item);  // Eliminar del carrito si ya no hay más en existencia
+            this.removeFromCart(item);
           }
           this.toastr.success(`Has comprado ${selectedQuantity} de ${product.nombre}`);
         },

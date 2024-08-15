@@ -7,7 +7,6 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const validateToken = (req, res, next) => {
     const headerToken = req.headers['authorization'];
     if (headerToken != undefined && headerToken.startsWith('Bearer ')) {
-        // Tiene token
         try {
             const bearerToken = headerToken.slice(7);
             const decoded = jsonwebtoken_1.default.verify(bearerToken, process.env.SECRET_KEY || 'pepito123');

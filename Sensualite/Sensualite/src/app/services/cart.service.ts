@@ -27,9 +27,11 @@ export class CartService {
     return this.http.get<{ product: Product, quantity: number }[]>(`${this.apiUrl}${this.cartApiUrl}`, { headers: this.getHeaders() });
   }
 
-  removeFromCart(product: Product): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}${this.cartApiUrl}${product.id}`, { headers: this.getHeaders() });
-  }
+  removeFromCart(productId: number) {
+    return this.http.delete(`${this.apiUrl}${this.cartApiUrl}item/${productId}`, {
+      headers: this.getHeaders()
+    });
+}
 
   buyProduct(product: Product, quantity: number): Observable<any> {
     const headers = this.getHeaders().set('Content-Type', 'application/json');
