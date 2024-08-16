@@ -9,5 +9,6 @@ const cart_1 = require("../controllers/cart");
 const router = (0, express_1.Router)();
 router.post('/', validate_token_1.default, cart_1.addToCart); // Ruta para agregar al carrito
 router.get('/', validate_token_1.default, cart_1.getCartItems); // Ruta para obtener los items del carrito
+router.post('/buy', validate_token_1.default, cart_1.buyCart); // Ruta para comprar todo el carrito
 router.delete('/item/:id', validate_token_1.default, cart_1.removeFromCart); // Ruta para eliminar un producto del carrito
 exports.default = router;

@@ -3,6 +3,9 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/dashboard"></ion-back-button>
         </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
+        </ion-buttons>
         <ion-title>Carrito de Compras</ion-title>
     </ion-toolbar>
 </ion-header>
@@ -16,20 +19,30 @@
             <ion-label>
                 <h2>{{ item.product.nombre }}</h2>
                 <p><strong>Descripción:</strong> {{ item.product.descripcion }}</p>
-                <p><strong>Precio:</strong>{{ item.product.precio | currency }}</p>
+                <p><strong>Precio:</strong> {{ item.product.precio | currency }}</p>
                 <p><strong>Disponibles:</strong> {{ item.product.existencia }}</p>
                 <ion-select placeholder="Cantidad" [(ngModel)]="item.quantity" interface="popover">
                     <ion-select-option *ngFor="let qty of getQuantities(item.product)" [value]="qty">{{ qty }}</ion-select-option>
                 </ion-select>
-                <ion-button fill="outline" color="danger" (click)="removeFromCart(item)">
-                    <ion-icon slot="start" name="trash"></ion-icon>
-                    Eliminar
-                </ion-button>
-                <ion-button fill="outline" color="success" (click)="buyProduct(item)">
-                    <ion-icon slot="start" name="cart"></ion-icon>
-                    Comprar
-                </ion-button>
+                <div class="button-group">
+                    <ion-button fill="outline" color="danger" (click)="removeFromCart(item)">
+                        <ion-icon slot="start" name="trash"></ion-icon>
+                        Eliminar
+                    </ion-button>
+                    <ion-button fill="outline" color="success" (click)="buyProduct(item)">
+                        <ion-icon slot="start" name="cart"></ion-icon>
+                        Comprar
+                    </ion-button>
+                </div>
             </ion-label>
         </ion-item>
     </ion-list>
+
+    <!-- Botón para comprar todo el carrito -->
+    <div class="center-button">
+        <ion-button fill="outline" color="primary" (click)="buyAllCart()">
+            <ion-icon slot="start" name="cart"></ion-icon>
+            Comprar Todo el Carrito
+        </ion-button>
+    </div>
 </ion-content>

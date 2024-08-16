@@ -3,6 +3,7 @@ import { CartService } from '../../../services/cart.service';
 import { Product } from '../../../interfaces/product';
 import { ToastrService } from 'ngx-toastr';
 import { CartItem } from 'src/app/interfaces/CartItem';
+import { Router } from '@angular/router';  // Importa Router para la navegación
 
 @Component({
   selector: 'app-cart',
@@ -12,35 +13,37 @@ import { CartItem } from 'src/app/interfaces/CartItem';
 export class CartPage implements OnInit {
   cartItems: { product: Product; quantity: number }[] = [];
 
-  constructor(private _cartService: CartService, private toastr: ToastrService) { }
+  constructor(
+    private _cartService: CartService,
+    private toastr: ToastrService,
+    private router: Router  // Inyecta el servicio Router
+  ) { }
 
   ngOnInit() {
-    this.loadCartItems();  // Mueve la lógica de carga a un método separado
+    this.loadCartItems();
   }
 
   private loadCartItems() {
     this._cartService.getCartItems().subscribe(
       (response: any) => {
         if (response.data && Array.isArray(response.data)) {
-          // Asumiendo que response.data es un array de items en sí mismo
           this.cartItems = response.data.map((item: CartItem) => ({
             product: item.product,
             quantity: item.quantity,
           }));
         } else if (response.data && response.data.items && Array.isArray(response.data.items)) {
-          // Caso original donde los items están dentro de response.data.items
           this.cartItems = response.data.items.map((item: CartItem) => ({
             product: item.product,
             quantity: item.quantity,
           }));
         } else {
           console.error('La respuesta no contiene un array esperado');
-          this.cartItems = []; // Respaldo para evitar problemas posteriores
+          this.cartItems = [];
         }
       },
       (error) => {
         console.error('Error al obtener los productos del carrito:', error);
-        this.cartItems = []; // En caso de error, evita que cartItems quede indefinido
+        this.cartItems = [];
       }
     );
   }
@@ -69,10 +72,7 @@ export class CartPage implements OnInit {
     if (product.existencia >= selectedQuantity) {
       this._cartService.buyProduct(product, selectedQuantity).subscribe(
         response => {
-          product.existencia -= selectedQuantity;
-          if (product.existencia === 0) {
-            this.removeFromCart(item);
-          }
+          this.removeFromCart(item); // Elimina el producto del carrito después de la compra
           this.toastr.success(`Has comprado ${selectedQuantity} de ${product.nombre}`);
         },
         error => {
@@ -83,5 +83,21 @@ export class CartPage implements OnInit {
     } else {
       this.toastr.warning(`El producto ${product.nombre} no tiene suficiente stock.`);
     }
+  }
+
+  buyAllCart() {
+    this._cartService.buyCart().subscribe(
+      () => {
+        this.cartItems = []; // Vacía el carrito después de la compra
+        this.toastr.success('Has comprado todos los productos del carrito');
+        this.router.navigate(['/dashboard']).then(() => {
+          window.location.reload(); // Recarga la página después de la navegación
+        });
+      },
+      error => {
+        console.error('Error al comprar todos los productos del carrito:', error);
+        this.toastr.error('Ocurrió un error al procesar la compra de todos los productos del carrito.');
+      }
+    );
   }
 }

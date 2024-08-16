@@ -33,6 +33,12 @@ export class CartService {
     });
 }
 
+buyCart(): Observable<any> {
+  return this.http.post<any>(`${this.apiUrl}${this.cartApiUrl}buy`, {}, {
+    headers: this.getHeaders()
+  });
+}
+
   buyProduct(product: Product, quantity: number): Observable<any> {
     const headers = this.getHeaders().set('Content-Type', 'application/json');
     return this.http.post<any>(`${this.apiUrl}api/products/buy`, { productId: product.id, quantity }, { headers });
