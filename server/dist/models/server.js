@@ -18,7 +18,7 @@ const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const cart_1 = __importDefault(require("../routes/cart"));
 const product_2 = require("./product");
-const user_2 = require("./user");
+const user_2 = __importDefault(require("./user"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -48,10 +48,10 @@ class Server {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield product_2.Product.sync();
-                yield user_2.User.sync();
+                yield user_2.default.sync();
             }
             catch (error) {
-                console.error('Unable to connect to database: ', error);
+                console.error('Conectado a la base de datos: ', error);
             }
         });
     }

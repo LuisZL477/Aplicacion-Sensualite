@@ -1,26 +1,24 @@
-import {Request, Response} from 'express';
-import  bcrypt from 'bcrypt';
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import User from '../models/user';
 import jwt from 'jsonwebtoken';
 
-export const newUser = async (req:Request, res:Response) => {
+export const newUser = async (req: Request, res: Response) => {
+    const { nombre, password, apellido, edad, correo, domicilio, telefono } = req.body;
 
-    const { nombre, password, apellido, edad, correo, domicilio , telefono} = req.body;
+    // Validamos si el usuario existe en la base de datos
+    const user = await User.findOne({ where: { correo: correo } });
 
-     // Validamos si el usuario existe en la base de datos
-     const user =  await User.findOne({where: {correo : correo}})
-    
-     if(user) {
+    if (user) {
         return res.status(400).json({
-             msg: `El correo ${correo} ya ha sido registrado`
-         })
-     }
-   
-    const hashedpassword = await bcrypt.hash(password, 10)
-   
+            msg: `El correo ${correo} ya ha sido registrado`
+        });
+    }
+
+    const hashedpassword = await bcrypt.hash(password, 10);
 
     try {
-        //Guardamos usuario en la base de datos
+        // Guardamos usuario en la base de datos
         await User.create({
             nombre: nombre,
             apellido: apellido,
@@ -28,43 +26,39 @@ export const newUser = async (req:Request, res:Response) => {
             correo: correo,
             password: hashedpassword,
             domicilio: domicilio,
-            telefono:telefono
-          
-        })
-    
+            telefono: telefono
+        });
+
         res.json({
             msg: `Usuario ${nombre} creado exitosamente`,
-            
-        })    
-        
+        });
+
     } catch (error) {
         res.status(400).json({
-            msg: 'Ocurrio un error',
+            msg: 'Ocurrió un error',
             error
-        })
+        });
     }
+};
 
-}
-
-export const loginUser =  async (req:Request, res:Response) => {
-
+export const loginUser = async (req: Request, res: Response) => {
     const { correo, password } = req.body;
 
-    // Validamos si el usuario existe en ña base de datos
-    const user : any =  await User.findOne({where: {correo : correo}})
+    // Validamos si el usuario existe en la base de datos
+    const user: any = await User.findOne({ where: { correo: correo } });
 
-    if(!user) {
+    if (!user) {
         return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${correo} en la base de datos`
-        })
+            msg: `No existe un usuario con el correo ${correo} en la base de datos`
+        });
     }
 
     // Validamos password 
-    const passwordValid = await bcrypt.compare(password,user.password)
-    if(!passwordValid){
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!passwordValid) {
         return res.status(400).json({
             msg: `Password incorrecta`
-        })
+        });
     }
 
     // Generamos token
@@ -74,4 +68,58 @@ export const loginUser =  async (req:Request, res:Response) => {
     }, process.env.SECRET_KEY || 'pepito123');
 
     res.json(token);
-}
+};
+
+// Mostrar un usuario por su ID (extraído del token)
+export const getUserById = async (req: Request, res: Response) => {
+    const userId = req.userId;
+
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado.' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error al obtener el usuario.', error });
+    }
+};
+
+// Editar usuario
+export const updateUser = async (req: Request, res: Response) => {
+    const userId = req.userId;
+    const { nombre, apellido, edad, correo, domicilio, telefono } = req.body;
+
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado.' });
+        }
+
+        await user.update({ nombre, apellido, edad, correo, domicilio, telefono });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error al actualizar el usuario.', error });
+    }
+};
+
+// Eliminar usuario
+export const deleteUser = async (req: Request, res: Response) => {
+    const userId = req.userId;
+
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado.' });
+        }
+
+        await user.destroy();
+        res.json({ msg: 'Usuario eliminado exitosamente.' });
+    } catch (error) {
+        res.status(500).json({ msg: 'Error al eliminar el usuario.', error });
+    }
+};

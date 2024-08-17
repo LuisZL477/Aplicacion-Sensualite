@@ -14,6 +14,7 @@ export class DashboardPage implements OnInit {
   listProduct: Product[] = [];
   loading: boolean = false;
   animatingIcons = new Set<number>();
+  userName: string | null = '';
 
   constructor(
     private router: Router,
@@ -25,6 +26,12 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
     this.getProducts();
+    this.getUserName();
+  }
+
+  getUserName() {
+    // Suponiendo que el nombre del usuario se almacena en localStorage
+    this.userName = localStorage.getItem('userName');
   }
 
   getProducts() {
@@ -42,11 +49,13 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/cart']);
   }
 
-  // Añadir un producto al carrito
-   isIconAnimating(index: number): boolean {
-     return this.animatingIcons.has(index);
-   }
+  perfil() {
+    this.router.navigate(['/perfil']);
+  }
 
+  isIconAnimating(index: number): boolean {
+    return this.animatingIcons.has(index);
+  }
 
   animateCartButton(buttonElement: HTMLElement) {
     const iconElement = buttonElement.querySelector('ion-icon');
@@ -60,7 +69,6 @@ export class DashboardPage implements OnInit {
       }, { once: true });
     }
   }
-  
 
   addToCart(product: Product, event: MouseEvent, index: number) {
     if (this.animatingIcons.has(index)) return;
@@ -71,7 +79,6 @@ export class DashboardPage implements OnInit {
       () => {
         this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
   
-        // Asegúrate de que `event.currentTarget` es un HTMLElement
         const target = event.currentTarget as HTMLElement;
         if (target) {
           this.animateCartButton(target);
@@ -85,11 +92,11 @@ export class DashboardPage implements OnInit {
   
     setTimeout(() => this.animatingIcons.delete(index), 300);
   }
-    
 
   logout() {
-    // Elimina el token del local storage
+    // Elimina el token y el nombre del usuario del local storage
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
 
     // Redirige al usuario a la página de login
     this.router.navigate(['/login']);

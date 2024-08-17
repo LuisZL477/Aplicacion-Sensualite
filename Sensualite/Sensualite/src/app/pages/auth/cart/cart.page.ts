@@ -73,7 +73,8 @@ export class CartPage implements OnInit {
       this._cartService.buyProduct(product, selectedQuantity).subscribe(
         response => {
           this.removeFromCart(item); // Elimina el producto del carrito después de la compra
-          this.toastr.success(`Has comprado ${selectedQuantity} de ${product.nombre}`);
+          this.toastr.success(`Has comprado ${selectedQuantity} de ${product.nombre}`);        
+            this.router.navigate(['/payment']); // Navega a la página de pago                    
         },
         error => {
           console.error('Error al comprar el producto:', error);
@@ -93,7 +94,7 @@ export class CartPage implements OnInit {
         this.router.navigate(['/dashboard']).then(() => {
           window.location.reload(); // Recarga la página después de la navegación
         });
-      },
+       },
       error => {
         console.error('Error al comprar todos los productos del carrito:', error);
         this.toastr.error('Ocurrió un error al procesar la compra de todos los productos del carrito.');

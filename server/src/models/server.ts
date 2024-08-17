@@ -5,7 +5,7 @@ import routesUser from '../routes/user';
 import routesCart from '../routes/cart'
 import db from '../db/connection';
 import { Product } from './product';
-import { User } from './user';
+import  User  from './user';
 
 
  class Server{
@@ -50,7 +50,7 @@ import { User } from './user';
             await User.sync()
          
         }catch (error){
-            console.error('Unable to connect to database: ', error)
+            console.error('Conectado a la base de datos: ', error)
         }
     }
 }

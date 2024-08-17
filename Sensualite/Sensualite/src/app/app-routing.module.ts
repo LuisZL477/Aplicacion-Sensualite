@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/dashboard/dashboard.module').then(m => m.DashboardPageModule)
   },
   {
+    path: 'perfil',
+    loadChildren: () => import('./pages/auth/perfil/perfil.module').then(m => m.PerfilPageModule)
+  },
+  {
     path: 'cart',
     loadChildren: () => import('./pages/auth/cart/cart.module').then(m => m.CartPageModule)
   },
@@ -24,7 +28,8 @@ const routes: Routes = [
     path: '**',
     redirectTo: 'auth',
     pathMatch: 'full'
-  }
+  },
+
 ];
 
 @NgModule({
