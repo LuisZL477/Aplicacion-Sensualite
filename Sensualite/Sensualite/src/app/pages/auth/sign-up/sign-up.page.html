@@ -28,7 +28,7 @@
 
             <!-- Edad -->
             <ion-item lines="full">
-                <ion-icon name="time-outline" slot="start"></ion-icon>
+                <ion-icon name="calendar-outline" slot="start"></ion-icon>
                 <ion-label position="floating">Edad</ion-label>
                 <ion-input type="number" [(ngModel)]="edad" name="edad" required></ion-input>
             </ion-item>
@@ -66,32 +66,36 @@
             <!-- Espacio vertical entre los inputs -->
             <div style="margin-bottom: 6px;"></div>
 
-            <!-- Contraseña -->
-        <ion-item lines="full">
-             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-            <ion-label position="floating">Contraseña</ion-label>
-            <ion-input #passwordInput type="password" [(ngModel)]="password" name="password" required></ion-input>
-            <ion-icon slot="end" name="eye" (click)="togglePasswordVisibility('password')" style="cursor: pointer; vertical-align: middle; margin-top: 24px;"></ion-icon>
-         </ion-item>
-
-            <!-- Espacio vertical entre los inputs -->
-            <div style="margin-bottom: 6px;"></div>
-
-            <!-- Confirmar Contraseña -->
             <ion-item lines="full">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-label position="floating">Contraseña</ion-label>
+                <ion-input #passwordInput type="password" [(ngModel)]="password" name="password" required></ion-input>
+                <ion-icon slot="end" name="eye" (click)="togglePasswordVisibility('password')" style="cursor: pointer; vertical-align: middle; margin-top: 24px;"></ion-icon>
+              </ion-item>
+              
+              <div style="margin-bottom: 6px;"></div>
+              
+              <ion-item lines="full">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-label position="floating">Confirmar Contraseña</ion-label>
-                <ion-input type="password" [(ngModel)]="confirmpassword" name="confirmpassword" required></ion-input>
+                <ion-input #confirmpasswordInput type="password" [(ngModel)]="confirmpassword" name="confirmpassword" required></ion-input>
                 <ion-icon slot="end" name="eye" (click)="togglePasswordVisibility('confirmpassword')" style="cursor: pointer; vertical-align: middle; margin-top: 24px;"></ion-icon>
-            </ion-item>
+              </ion-item>
+              
 
             <!-- Espacio vertical entre los inputs -->
             <div style="margin-bottom: 6px;"></div>
 
             <!-- Botón Registrarse -->
-            <ion-button expand="block" (click)="addUser()" mode="ios" class="submit custom-button" color="undefined">Registrarse
-                <ion-icon slot="end" name="person-add-outline"></ion-icon>
-            </ion-button>
+            <ion-button expand="block" (click)="addUser()" mode="ios" class="submit custom-button" color="undefined" [disabled]="loading">
+                <div *ngIf="loading" class="spinner-container">
+                  <div class="spinner-border spinner-border-sm text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                <span *ngIf="!loading">Registrarse</span>
+                <ion-icon slot="end" name="person-add-outline" *ngIf="!loading"></ion-icon>
+              </ion-button>
         </form>
     </div>
     <app-spinner *ngIf="loading"></app-spinner>

@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/perfil/perfil.module').then(m => m.PerfilPageModule)
   },
   {
+    path: 'edituser',
+    loadChildren: () => import('./pages/auth/edituser/edituser.module').then(m => m.EdituserPageModule)
+  },
+  {
     path: 'cart',
     loadChildren: () => import('./pages/auth/cart/cart.module').then(m => m.CartPageModule)
   },

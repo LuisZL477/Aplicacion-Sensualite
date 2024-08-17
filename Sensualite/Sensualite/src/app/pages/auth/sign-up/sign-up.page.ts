@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { IonInput } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/users';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -11,6 +13,11 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage {
+
+  @ViewChild('passwordInput', { static: false }) passwordInput: IonInput | undefined;
+  @ViewChild('confirmpasswordInput', { static: false }) confirmpasswordInput: IonInput | undefined;
+
+
   nombre: string = '';
   apellido: string = '';
   edad: number | undefined;
@@ -28,9 +35,13 @@ export class SignUpPage {
   ) {}
 
   togglePasswordVisibility(inputType: string) {
-    const passwordInput = document.getElementsByName(inputType)[0] as HTMLIonInputElement;
-    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    if (inputType === 'password' && this.passwordInput) {
+      this.passwordInput.type = this.passwordInput.type === 'password' ? 'text' : 'password';
+    } else if (inputType === 'confirmpassword' && this.confirmpasswordInput) {
+      this.confirmpasswordInput.type = this.confirmpasswordInput.type === 'password' ? 'text' : 'password';
+    }
   }
+  
 
   addUser() {
     // Validar que el usuario ingrese campos

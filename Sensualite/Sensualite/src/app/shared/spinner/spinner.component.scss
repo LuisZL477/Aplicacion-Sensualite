@@ -1,0 +1,15 @@
+/* Alineación y estilo del spinner dentro del botón */
+.btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .spinner-border {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-right: 8px; /* Espacio entre el spinner y el texto */
+  }
+  
