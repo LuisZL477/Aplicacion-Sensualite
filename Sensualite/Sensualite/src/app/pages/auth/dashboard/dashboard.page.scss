@@ -90,3 +90,16 @@ ion-button:hover {
     max-height: 200px;
     /* Ajusta la altura máxima de la imagen según sea necesario */
 }
+
+/* Estilos generales para ion-item */
+ion-item {
+    transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves para color y tamaño */
+  }
+  
+  /* Estilo cuando el cursor pasa sobre el elemento */
+  ion-item:hover, ion-item:focus {
+    transform: scale(1.05); /* Aumenta el tamaño del elemento al 105% */
+    background-color: #e0f7fa; /* Cambia el color de fondo */
+    color: #00796b; /* Cambia el color del texto */
+  }
+  

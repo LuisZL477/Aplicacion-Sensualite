@@ -29,6 +29,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/cart/cart.module').then(m => m.CartPageModule)
   },
   {
+    path: 'categorias',
+    loadChildren: () => import('./pages/auth/categorias/categorias.module').then(m => m.CategoriasPageModule)
+  },
+
+  {
     path: '**',
     redirectTo: 'auth',
     pathMatch: 'full'

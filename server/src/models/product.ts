@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../db/connection';
+const{ Category } = require ('./categoria');
 
 export interface ProductInstance extends Model {
   id: number;
@@ -9,6 +10,7 @@ export interface ProductInstance extends Model {
   descripcion: string;
   existencia: number;
   imagen: string;
+  categoriaId: number; // Clave foránea
 }
 
 export const Product = sequelize.define<ProductInstance>('product', {
@@ -34,8 +36,30 @@ export const Product = sequelize.define<ProductInstance>('product', {
   },
   imagen: {
     type: DataTypes.STRING
+  },
+  categoriaId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'categorias', // Nombre de la tabla de categorías
+      key: 'id'
+    }
   }
 }, {
   timestamps: false,
-  tableName: 'Productos'
+  tableName: 'productos'
 });
+
+
+
+// Hook para registrar la categoría cuando se establece el campo 'tipo'
+Product.beforeUpdate(async (product) => {
+  if (product.tipo) {
+    const [category, created] = await Category.findOrCreate({
+      where: { nombre: product.tipo },
+      defaults: { nombre: product.tipo }
+    });
+    product.tipo = category.nombre;
+  }
+});
+
+

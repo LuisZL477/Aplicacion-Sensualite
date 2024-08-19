@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Categorías</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let category of categories">
+      {{ category.nombre }}
+    </ion-item>
+  </ion-list>
+  
+  <ion-text *ngIf="categories.length === 0">
+    No hay categorías disponibles.
+  </ion-text>
+</ion-content>

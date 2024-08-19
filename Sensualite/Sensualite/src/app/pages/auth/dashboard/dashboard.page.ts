@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service'; 
 import { Product } from '../../../interfaces/product'; 
 import { CartService } from '../../../services/cart.service'; 
+import { CategoryService } from '../../../services/category.service'; // Servicio de categorías
+import { Category } from '../../../interfaces/category'; 
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -12,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class DashboardPage implements OnInit {
   listProduct: Product[] = [];
+  allProducts: Product[] = []; // Para guardar la lista completa de productos
+  categories: Category[] = [];
   loading: boolean = false;
   animatingIcons = new Set<number>();
   userName: string | null = '';
@@ -22,11 +26,13 @@ export class DashboardPage implements OnInit {
     private _cartService: CartService,
     private toastr: ToastrService,
     private renderer: Renderer2,
+    private categoryService: CategoryService
   ) { }
 
   ngOnInit() {
     this.getProducts();
     this.getUserName();
+    this.loadCategories(); // Cargar categorías
   }
 
   getUserName() {
@@ -38,11 +44,27 @@ export class DashboardPage implements OnInit {
     this.loading = true;
     this._productService.getProducts().subscribe((data: Product[]) => {
       this.listProduct = data;
+      this.allProducts = data; // Guardar la lista completa de productos
       this.loading = false;
     }, error => {
       console.error('Error al obtener productos', error);
       this.loading = false;
     });
+  }
+
+  loadCategories() {
+    this.categoryService.getCategories().subscribe({
+      next: (data: Category[]) => this.categories = data,
+      error: (err) => console.error('Error al obtener categorías', err)
+    });
+  }
+
+  filterProductsByCategory(categoryName: string) {
+    if (categoryName) {
+      this.listProduct = this.allProducts.filter(product => product.tipo === categoryName);
+    } else {
+      this.listProduct = this.allProducts; // Si no hay categoría seleccionada, mostrar todos los productos
+    }
   }
 
   goToCart() {
@@ -100,5 +122,10 @@ export class DashboardPage implements OnInit {
 
     // Redirige al usuario a la página de login
     this.router.navigate(['/login']);
+  }
+
+  goToDashboard() {
+    this.listProduct = this.allProducts;
+    this.router.navigate(['/dashboard']);
   }
 }

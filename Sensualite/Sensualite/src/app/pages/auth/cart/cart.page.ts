@@ -74,7 +74,7 @@ export class CartPage implements OnInit {
         response => {
           this.removeFromCart(item); // Elimina el producto del carrito después de la compra
           this.toastr.success(`Has comprado ${selectedQuantity} de ${product.nombre}`);        
-            this.router.navigate(['/payment']); // Navega a la página de pago                    
+            this.router.navigate(['/dashboard']); // Navega a la página de pago                    
         },
         error => {
           console.error('Error al comprar el producto:', error);
