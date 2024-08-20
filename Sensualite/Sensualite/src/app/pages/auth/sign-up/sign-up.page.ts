@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonInput } from '@ionic/angular';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';  // Importa SweetAlert2
 import { User } from 'src/app/interfaces/users';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +15,6 @@ export class SignUpPage {
 
   @ViewChild('passwordInput', { static: false }) passwordInput: IonInput | undefined;
   @ViewChild('confirmpasswordInput', { static: false }) confirmpasswordInput: IonInput | undefined;
-
 
   nombre: string = '';
   apellido: string = '';
@@ -29,7 +27,6 @@ export class SignUpPage {
   loading: boolean = false;
 
   constructor(
-    private toastr: ToastrService, 
     private _userService: UserService, 
     private router: Router
   ) {}
@@ -41,18 +38,23 @@ export class SignUpPage {
       this.confirmpasswordInput.type = this.confirmpasswordInput.type === 'password' ? 'text' : 'password';
     }
   }
-  
 
   addUser() {
     // Validar que el usuario ingrese campos
     if (!this.nombre || !this.apellido || this.edad === undefined || !this.correo || !this.domicilio || this.telefono === undefined || !this.password || !this.confirmpassword) {
-      this.toastr.warning('Todos los campos son obligatorios', 'Campos vacíos');
+      this.showWarningAlert('Todos los campos son obligatorios');
+      return;
+    }
+
+    // Validar la edad mínima
+    if (this.edad < 18) {
+      this.showWarningAlert('Debes tener al menos 18 años para registrarte.');
       return;
     }
 
     // Validar que las contraseñas coincidan
     if (this.password !== this.confirmpassword) {
-      this.toastr.warning('Las contraseñas no coinciden', 'Contraseña inválida');
+      this.showWarningAlert('Las contraseñas no coinciden');
       return;
     }
 
@@ -70,9 +72,9 @@ export class SignUpPage {
 
     this.loading = true;
     this._userService.signIn(user).subscribe({
-      next: (v) => {
+      next: () => {
         this.loading = false;
-        this.toastr.success(`El usuario ${user.nombre} con la cuenta ${user.correo} fue registrado con éxito`, 'Usuario registrado');
+        this.showSuccessAlert(`El usuario ${user.nombre} con la cuenta ${user.correo} fue registrado con éxito`);
         this.router.navigate(['/auth']);
       },
       error: (e: HttpErrorResponse) => {
@@ -94,9 +96,54 @@ export class SignUpPage {
 
   msjError(e: HttpErrorResponse) {
     if (e.error.msg) {
-      this.toastr.error(e.error.msg, 'Error');
+      this.showErrorAlert(e.error.msg);
     } else {
-      this.toastr.error('¡Ha ocurrido un error con el servidor, comuníquese con el administrador!', 'Error servidor');
+      this.showErrorAlert('¡Ha ocurrido un error con el servidor, comuníquese con el administrador!');
     }
+  }
+
+  showWarningAlert(message: string): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Advertencia',
+      text: message,
+      confirmButtonColor: '#f39c12',
+      heightAuto: false, // Desactiva el ajuste automático de la altura
+      customClass: {
+        popup: 'swal2-mobile-popup', // Clase CSS personalizada
+        title: 'swal2-mobile-title',
+        confirmButton: 'swal2-mobile-confirm',
+      }
+    });
+  }
+
+  showErrorAlert(message: string): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: message,
+      confirmButtonColor: '#d33',
+      heightAuto: false, // Desactiva el ajuste automático de la altura
+      customClass: {
+        popup: 'swal2-mobile-popup', // Clase CSS personalizada
+        title: 'swal2-mobile-title',
+        confirmButton: 'swal2-mobile-confirm',
+      }
+    });
+  }
+
+  showSuccessAlert(message: string): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: message,
+      confirmButtonColor: '#3085d6',
+      heightAuto: false, // Desactiva el ajuste automático de la altura
+      customClass: {
+        popup: 'swal2-mobile-popup', // Clase CSS personalizada
+        title: 'swal2-mobile-title',
+        confirmButton: 'swal2-mobile-confirm',
+      }
+    });
   }
 }

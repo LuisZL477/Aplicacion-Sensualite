@@ -1,84 +1,84 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-back-button defaultHref="/perfil"></ion-back-button>
-      </ion-buttons>
-      <ion-buttons slot="start">
-          <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
-      </ion-buttons>
-      <ion-title>Editar Perfil</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/perfil"></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
+        </ion-buttons>
+        <ion-title>Editar Perfil</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form *ngIf="!loading" class="auth-form" (ngSubmit)="saveUser()">
+    <form *ngIf="!loading" class="auth-form" (ngSubmit)="saveUser()">
 
-    <!-- Nombre -->
-    <ion-item lines="full">
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Nombre</ion-label>
-        <ion-input type="text" [(ngModel)]="user.nombre" name="nombre" required></ion-input>
-    </ion-item>
+        <!-- Nombre -->
+        <ion-item lines="full">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="user.nombre" name="nombre" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Apellido -->
-    <ion-item lines="full">
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Apellido</ion-label>
-        <ion-input type="text" [(ngModel)]="user.apellido" name="apellido" required></ion-input>
-    </ion-item>
+        <!-- Apellido -->
+        <ion-item lines="full">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Apellido</ion-label>
+            <ion-input type="text" [(ngModel)]="user.apellido" name="apellido" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Edad -->
-    <ion-item lines="full">
-        <ion-icon name="time-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Edad</ion-label>
-        <ion-input type="number" [(ngModel)]="user.edad" name="edad" required></ion-input>
-    </ion-item>
+        <!-- Edad -->
+        <ion-item lines="full">
+            <ion-icon name="time-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Edad</ion-label>
+            <ion-input type="number" [(ngModel)]="user.edad" name="edad" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Correo Electrónico -->
-    <ion-item lines="full">
-        <ion-icon name="mail-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Correo Electrónico</ion-label>
-        <ion-input type="email" [(ngModel)]="user.correo" name="correo" required></ion-input>
-    </ion-item>
+        <!-- Correo Electrónico -->
+        <ion-item lines="full">
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Correo Electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="user.correo" name="correo" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Dirección -->
-    <ion-item lines="full">
-        <ion-icon name="location-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Dirección</ion-label>
-        <ion-input type="text" [(ngModel)]="user.domicilio" name="domicilio" required></ion-input>
-    </ion-item>
+        <!-- Dirección -->
+        <ion-item lines="full">
+            <ion-icon name="location-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Dirección</ion-label>
+            <ion-input type="text" [(ngModel)]="user.domicilio" name="domicilio" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Teléfono -->
-    <ion-item lines="full">
-        <ion-icon name="call-outline" slot="start"></ion-icon>
-        <ion-label position="floating">Teléfono</ion-label>
-        <ion-input type="tel" [(ngModel)]="user.telefono" name="telefono" required></ion-input>
-    </ion-item>
+        <!-- Teléfono -->
+        <ion-item lines="full">
+            <ion-icon name="call-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Teléfono</ion-label>
+            <ion-input type="tel" [(ngModel)]="user.telefono" name="telefono" required></ion-input>
+        </ion-item>
 
-    <!-- Espacio vertical entre los inputs -->
-    <div style="margin-bottom: 6px;"></div>
+        <!-- Espacio vertical entre los inputs -->
+        <div style="margin-bottom: 6px;"></div>
 
-    <!-- Botón Guardar Cambios -->
-    <ion-button expand="block" type="submit" mode="ios" class="submit custom-button" color="primary">
-        Guardar Cambios
-        <ion-icon slot="end" name="save-outline"></ion-icon>
-    </ion-button>
-  </form>
+        <!-- Botón Guardar Cambios -->
+        <ion-button fill="outline" expand="block" type="submit" mode="ios" class="submit custom-button" color="primary">
+            Guardar Cambios
+            <ion-icon slot="end" name="save-outline"></ion-icon>
+        </ion-button>
+    </form>
 
-  <app-spinner *ngIf="loading"></app-spinner>
+    <app-spinner *ngIf="loading"></app-spinner>
 </ion-content>

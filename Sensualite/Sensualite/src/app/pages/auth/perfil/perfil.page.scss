@@ -29,26 +29,21 @@ p {
     display: flex;
     gap: 10px;
     /* Espacio entre los botones */
-    margin-top: 8px;
+    margin-top: 2px;
 }
 
 .center-button {
     display: flex;
     justify-content: center;
-    padding: 16px;
+    /* Centra los botones horizontalmente */
+    gap: 16px;
 }
 
 .center-button ion-button {
-    width: 80%;
-    max-width: 300px;
+    width: 70%;
+    max-width: 200px;
     --border-radius: 20px;
     --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-ion-button {
-    --border-radius: 8px;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
 }
 
 .perfil-card-inline {
@@ -79,4 +74,31 @@ ion-item {
     align-items: center;
     justify-content: flex-start;
     margin-bottom: 10px;
+}
+
+.swal2-mobile-popup {
+    font-size: 16px !important;
+    /* Ajusta el tamaño de fuente */
+    width: 90% !important;
+    /* Ajusta el ancho del modal */
+    max-width: 400px !important;
+    /* Limita el ancho máximo */
+}
+
+.swal2-mobile-title {
+    font-size: 18px !important;
+}
+
+.swal2-mobile-content {
+    font-size: 16px !important;
+}
+
+.swal2-mobile-confirm {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+}
+
+.swal2-mobile-cancel {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
 }

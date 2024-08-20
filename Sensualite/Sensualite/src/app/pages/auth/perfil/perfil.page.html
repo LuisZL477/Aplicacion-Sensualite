@@ -78,19 +78,14 @@
                     </ion-card-content>
                 </ion-card>
             </ion-item>
-
-            <ion-item lines="none">
-                <div class="button-group full-width">
-                    <ion-button fill="outline" color="success" routerLink="/edituser">
-                        <ion-icon slot="start" name="create-outline"></ion-icon>
-                        Editar
-                    </ion-button>
-                    <ion-button fill="outline" color="danger" (click)="deleteUser()">
-                        <ion-icon slot="start" name="trash-outline"></ion-icon>
-                        Eliminar
-                    </ion-button>
-                </div>
-            </ion-item>
         </ion-list>
     </div>
+    <ion-button fill="outline" expand="block" type="submit" mode="ios" class="submit custom-button" color="success" routerLink="/edituser">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+    </ion-button>
+    <ion-button fill="outline" expand="block" type="submit" mode="ios" class="submit custom-button" color="danger" (click)="deleteUser()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+    </ion-button>
 </ion-content>

@@ -1,11 +1,12 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { ProductService } from '../../../services/product.service'; 
 import { Product } from '../../../interfaces/product'; 
 import { CartService } from '../../../services/cart.service'; 
-import { CategoryService } from '../../../services/category.service'; // Servicio de categorías
+import { CategoryService } from '../../../services/category.service'; 
 import { Category } from '../../../interfaces/category'; 
-import { ToastrService } from 'ngx-toastr';
+import { MenuController } from '@ionic/angular';  // Importa el MenuController de Ionic
 
 @Component({
   selector: 'app-dashboard',
@@ -19,14 +20,15 @@ export class DashboardPage implements OnInit {
   loading: boolean = false;
   animatingIcons = new Set<number>();
   userName: string | null = '';
+  showCategories: boolean = true; // Controla la visibilidad de las categorías
 
   constructor(
     private router: Router,
     private _productService: ProductService,
     private _cartService: CartService,
-    private toastr: ToastrService,
     private renderer: Renderer2,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private menuCtrl: MenuController  // Añadir el controlador del menú
   ) { }
 
   ngOnInit() {
@@ -61,10 +63,13 @@ export class DashboardPage implements OnInit {
 
   filterProductsByCategory(categoryName: string) {
     if (categoryName) {
-      this.listProduct = this.allProducts.filter(product => product.tipo === categoryName);
+        this.listProduct = this.allProducts.filter(product => product.tipo === categoryName);
     } else {
-      this.listProduct = this.allProducts; // Si no hay categoría seleccionada, mostrar todos los productos
+        this.listProduct = this.allProducts; // Si no hay categoría seleccionada, mostrar todos los productos
     }
+
+    // Cierra el menú después de seleccionar la categoría
+    this.menuCtrl.close('main-menu');
   }
 
   goToCart() {
@@ -99,7 +104,13 @@ export class DashboardPage implements OnInit {
   
     this._cartService.addToCart(product, 1).subscribe(
       () => {
-        this.toastr.success(`${product.nombre} añadido al carrito.`, 'Producto Añadido');
+        Swal.fire({
+          icon: 'success',
+          title: 'Producto Añadido',
+          text: `${product.nombre} añadido al carrito.`,
+          confirmButtonColor: '#3085d6',
+          heightAuto: false,
+        });
   
         const target = event.currentTarget as HTMLElement;
         if (target) {
@@ -108,7 +119,13 @@ export class DashboardPage implements OnInit {
       },
       (error) => {
         console.error('Error al añadir el producto al carrito:', error);
-        this.toastr.error('Ocurrió un error al añadir el producto al carrito.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al añadir el producto al carrito.',
+          confirmButtonColor: '#d33',
+          heightAuto: false,
+        });
       }
     );
   
@@ -124,8 +141,17 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  openMenu() {
+    this.categoryService.getCategories().subscribe({
+      next: (data: Category[]) => this.categories = data,
+      error: (err) => console.error('Error al obtener categorías', err)
+    });
+  }
+  
+
   goToDashboard() {
-    this.listProduct = this.allProducts;
-    this.router.navigate(['/dashboard']);
+    this.showCategories = true; // Mostrar la sección de categorías nuevamente
+    this.listProduct = this.allProducts;  
+    this.menuCtrl.close('main-menu'); 
   }
 }
