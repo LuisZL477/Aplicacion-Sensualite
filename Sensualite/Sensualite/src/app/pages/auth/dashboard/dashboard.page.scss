@@ -66,6 +66,12 @@ ion-button:hover {
     animation: cart-click-animation 0.3s ease-in-out;
 }
 
+.custom-cart-animation {
+    color: rgb(255, 0, 212) !important;
+    transform: scale(1.5) !important;
+    transition: transform 0.3s, color 0.3s;
+}
+
 
 /* Define cart icon animation */
 
@@ -91,15 +97,23 @@ ion-button:hover {
     /* Ajusta la altura máxima de la imagen según sea necesario */
 }
 
+
 /* Estilos generales para ion-item */
+
 ion-item {
-    transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves para color y tamaño */
-  }
-  
-  /* Estilo cuando el cursor pasa sobre el elemento */
-  ion-item:hover, ion-item:focus {
-    transform: scale(1.05); /* Aumenta el tamaño del elemento al 105% */
-    background-color: #e0f7fa; /* Cambia el color de fondo */
-    color: #00796b; /* Cambia el color del texto */
-  }
-  
+    transition: background-color 0.3s, transform 0.3s;
+    /* Transiciones suaves para color y tamaño */
+}
+
+
+/* Estilo cuando el cursor pasa sobre el elemento */
+
+ion-item:hover,
+ion-item:focus {
+    transform: scale(1.05);
+    /* Aumenta el tamaño del elemento al 105% */
+    background-color: #e0f7fa;
+    /* Cambia el color de fondo */
+    color: #00796b;
+    /* Cambia el color del texto */
+}

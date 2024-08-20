@@ -64,7 +64,8 @@
                         <p><strong>Precio:</strong> {{ product.precio | currency }}</p>
                         <p><strong>Disponibles:</strong> {{ product.existencia }}</p>
                         <p>
-                            <ion-icon slot="end" name="cart-outline" size="large" [ngClass]="{ 'cart-icon-animation': isIconAnimating(i) }" (click)="addToCart(product, $event, i)"></ion-icon>
+                            <ion-icon slot="end" name="cart-outline" size="large" [ngClass]="{ 'cart-icon-animation': isIconAnimating(i) }" (click)="addToCart(product, $event, i)">
+                            </ion-icon>
                         </p>
                     </ion-card-content>
                 </ion-card>

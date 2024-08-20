@@ -51,13 +51,29 @@ export class DashboardPage implements OnInit {
     }, error => {
       console.error('Error al obtener productos', error);
       this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al obtener los productos.',
+        confirmButtonColor: '#d33',
+        heightAuto: false,
+      });
     });
   }
 
   loadCategories() {
     this.categoryService.getCategories().subscribe({
       next: (data: Category[]) => this.categories = data,
-      error: (err) => console.error('Error al obtener categorías', err)
+      error: (err) => {
+        console.error('Error al obtener categorías', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al obtener las categorías.',
+          confirmButtonColor: '#d33',
+          heightAuto: false,
+        });
+      }
     });
   }
 
@@ -87,50 +103,48 @@ export class DashboardPage implements OnInit {
   animateCartButton(buttonElement: HTMLElement) {
     const iconElement = buttonElement.querySelector('ion-icon');
     if (iconElement) {
-      this.renderer.addClass(iconElement, 'animate__animated');
-      this.renderer.addClass(iconElement, 'animate__bounce');
-  
-      iconElement.addEventListener('animationend', () => {
-        this.renderer.removeClass(iconElement, 'animate__animated');
-        this.renderer.removeClass(iconElement, 'animate__bounce');
-      }, { once: true });
+        this.renderer.addClass(iconElement, 'custom-cart-animation');
+        
+        iconElement.addEventListener('transitionend', () => {
+            this.renderer.removeClass(iconElement, 'custom-cart-animation');
+        }, { once: true });
     }
-  }
+}
 
   addToCart(product: Product, event: MouseEvent, index: number) {
     if (this.animatingIcons.has(index)) return;
-  
+
     this.animatingIcons.add(index);
-  
+
     this._cartService.addToCart(product, 1).subscribe(
-      () => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Producto Añadido',
-          text: `${product.nombre} añadido al carrito.`,
-          confirmButtonColor: '#3085d6',
-          heightAuto: false,
-        });
-  
-        const target = event.currentTarget as HTMLElement;
-        if (target) {
-          this.animateCartButton(target);
+        () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Añadido',
+                text: `${product.nombre} añadido al carrito.`,
+                confirmButtonColor: '#3085d6',
+                heightAuto: false,
+            });
+
+            const target = event.currentTarget as HTMLElement;
+            if (target) {
+                this.animateCartButton(target);
+            }
+        },
+        (error) => {
+            console.error('Error al añadir el producto al carrito:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al añadir el producto al carrito.',
+                confirmButtonColor: '#d33',
+                heightAuto: false,
+            });
         }
-      },
-      (error) => {
-        console.error('Error al añadir el producto al carrito:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al añadir el producto al carrito.',
-          confirmButtonColor: '#d33',
-          heightAuto: false,
-        });
-      }
     );
-  
+
     setTimeout(() => this.animatingIcons.delete(index), 300);
-  }
+}
 
   logout() {
     // Elimina el token y el nombre del usuario del local storage
@@ -147,7 +161,6 @@ export class DashboardPage implements OnInit {
       error: (err) => console.error('Error al obtener categorías', err)
     });
   }
-  
 
   goToDashboard() {
     this.showCategories = true; // Mostrar la sección de categorías nuevamente
