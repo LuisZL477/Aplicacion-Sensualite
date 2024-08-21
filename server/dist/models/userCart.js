@@ -35,4 +35,5 @@ user_1.default.hasMany(UserCart, { foreignKey: 'userId' });
 UserCart.belongsTo(user_1.default, { foreignKey: 'userId' });
 // Define la relación con CartItem
 UserCart.hasMany(CartItem_1.default, { foreignKey: 'userCartId', as: 'items' });
+CartItem_1.default.belongsTo(UserCart, { foreignKey: 'userCartId' });
 exports.default = UserCart;

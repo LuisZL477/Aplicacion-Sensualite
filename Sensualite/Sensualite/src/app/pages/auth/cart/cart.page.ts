@@ -24,6 +24,7 @@ export class CartPage implements OnInit {
   ngOnInit() {
     this.loadCartItems();
   }
+  
 
   private loadCartItems() {
     this._cartService.getCartItems().subscribe(

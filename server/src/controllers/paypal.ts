@@ -7,8 +7,8 @@ import { Product } from '../models/product';
 // Configura PayPal con tus credenciales
 paypal.configure({
   mode: 'sandbox', // Cambia a 'live' para producción
-  client_id: process.env.PAYPAL_CLIENT_ID || 'midnqwijduidweygfdhc',
-  client_secret: process.env.PAYPAL_CLIENT_SECRET || '36ed87wdcibcte2r6127ey2quibqsddxwc',
+  client_id: process.env.PAYPAL_CLIENT_ID || '',
+  client_secret: process.env.PAYPAL_CLIENT_SECRET || '',
 });
 
 // Extiende la interfaz UserCart para incluir 'items'
@@ -57,15 +57,15 @@ export const createPayPalTransaction = async (req: Request, res: Response) => {
         payment_method: 'paypal',
       },
       redirect_urls: {
-        return_url: `${process.env.BASE_URL}/api/paypal/success`,
-        cancel_url: `${process.env.BASE_URL}/api/paypal/cancel`,
+        return_url: `http://localhost:${process.env.PORT}/api/paypal/success`,
+        cancel_url: `http://localhost:${process.env.PORT}/api/paypal/cancel`,
       },
       transactions: [{
         item_list: {
           items,
         },
         amount: {
-          currency: 'USD',
+          currency: 'MXN',
           total,
         },
         description: 'Compra del carrito de compras',
@@ -74,12 +74,16 @@ export const createPayPalTransaction = async (req: Request, res: Response) => {
 
     paypal.payment.create(createPaymentJson, (error, payment) => {
       if (error) {
-        console.error(error);
-        return res.status(500).json({ msg: 'Error al crear la transacción de PayPal' });
+        console.error('PayPal Error:', error.response);
+        return res.status(500).json({ msg: 'Error al crear la transacción de PayPal', details: error.response });
       }
 
       const approvalUrl = payment.links?.find(link => link.rel === 'approval_url')?.href;
-      res.status(200).json({ approvalUrl });
+      if (approvalUrl) {
+        res.status(200).json({ approvalUrl });
+      } else {
+        res.status(500).json({ msg: 'No se pudo obtener la URL de aprobación de PayPal.' });
+      }
     });
   } catch (error) {
     console.error('Error al crear la transacción de PayPal:', error);
@@ -97,8 +101,8 @@ export const successPayPalTransaction = async (req: Request, res: Response) => {
 
   paypal.payment.execute(paymentId as string, executePaymentJson, async (error, payment) => {
     if (error) {
-      console.error(error.response);
-      return res.status(500).json({ msg: 'Error al completar la transacción de PayPal' });
+      console.error('PayPal Execution Error:', error.response);
+      return res.status(500).json({ msg: 'Error al completar la transacción de PayPal', details: error.response });
     }
 
     try {

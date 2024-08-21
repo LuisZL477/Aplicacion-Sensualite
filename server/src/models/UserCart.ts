@@ -47,6 +47,6 @@ UserCart.belongsTo(User, { foreignKey: 'userId' });
 
 // Define la relación con CartItem
 UserCart.hasMany(CartItem, { foreignKey: 'userCartId', as: 'items' });
-
+CartItem.belongsTo(UserCart, { foreignKey: 'userCartId' });
 export default UserCart;
 

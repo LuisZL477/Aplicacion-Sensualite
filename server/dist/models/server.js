@@ -18,6 +18,7 @@ const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const cart_1 = __importDefault(require("../routes/cart"));
 const category_1 = __importDefault(require("../routes/category"));
+const paypal_1 = __importDefault(require("../routes/paypal"));
 const product_2 = require("./product");
 const user_2 = __importDefault(require("./user"));
 class Server {
@@ -39,6 +40,7 @@ class Server {
         this.app.use('/api/users', user_1.default);
         this.app.use('/api/carts', cart_1.default);
         this.app.use('/api/categories', category_1.default);
+        this.app.use('/api/paypal', paypal_1.default);
     }
     middlewares() {
         // Parseo body

@@ -59,5 +59,5 @@ CartItem.init({
 
 // Relación CartItem -> Product
 CartItem.belongsTo(Product, { foreignKey: 'productId' });
-
+Product.hasMany(CartItem, { foreignKey: 'productId' });
 export default CartItem;
