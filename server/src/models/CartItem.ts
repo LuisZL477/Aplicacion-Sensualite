@@ -18,6 +18,9 @@ class CartItem extends Model<CartItemAttributes, CartItemCreationAttributes> imp
     public userCartId!: number;
     public productId!: number;
     public quantity!: number;
+
+    // Asociación
+    public product?: InstanceType<typeof Product>; // Usar InstanceType para la relación con el producto
 }
 
 CartItem.init({
@@ -54,12 +57,7 @@ CartItem.init({
     timestamps: false
 });
 
-// Relación UserCart -> CartItem
-UserCart.hasMany(CartItem, { foreignKey: 'userCartId', as: 'items' });
-CartItem.belongsTo(UserCart, { foreignKey: 'userCartId' });
-
-// Relación Product -> CartItem
-Product.hasMany(CartItem, { foreignKey: 'productId' });
+// Relación CartItem -> Product
 CartItem.belongsTo(Product, { foreignKey: 'productId' });
 
 export default CartItem;

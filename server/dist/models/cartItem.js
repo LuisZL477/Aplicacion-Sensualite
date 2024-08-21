@@ -42,10 +42,6 @@ CartItem.init({
     tableName: 'Carrito',
     timestamps: false
 });
-// Relación UserCart -> CartItem
-UserCart_1.default.hasMany(CartItem, { foreignKey: 'userCartId', as: 'items' });
-CartItem.belongsTo(UserCart_1.default, { foreignKey: 'userCartId' });
-// Relación Product -> CartItem
-product_1.Product.hasMany(CartItem, { foreignKey: 'productId' });
+// Relación CartItem -> Product
 CartItem.belongsTo(product_1.Product, { foreignKey: 'productId' });
 exports.default = CartItem;

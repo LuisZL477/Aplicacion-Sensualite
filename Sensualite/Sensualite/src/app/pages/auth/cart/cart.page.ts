@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../../services/cart.service';
+import { PayPalService } from '../../../services/paypal.service'; // Importa PayPalService
 import { Product } from '../../../interfaces/product';
 import { ToastrService } from 'ngx-toastr';
 import { CartItem } from 'src/app/interfaces/CartItem';
-import { Router } from '@angular/router';  // Importa Router para la navegación
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -15,6 +16,7 @@ export class CartPage implements OnInit {
 
   constructor(
     private _cartService: CartService,
+    private _payPalService: PayPalService, // Inyecta PayPalService
     private toastr: ToastrService,
     private router: Router  // Inyecta el servicio Router
   ) { }
@@ -87,17 +89,13 @@ export class CartPage implements OnInit {
   }
 
   buyAllCart() {
-    this._cartService.buyCart().subscribe(
-      () => {
-        this.cartItems = []; // Vacía el carrito después de la compra
-        this.toastr.success('Has comprado todos los productos del carrito');
-        this.router.navigate(['/dashboard']).then(() => {
-          window.location.reload(); // Recarga la página después de la navegación
-        });
-       },
-      error => {
-        console.error('Error al comprar todos los productos del carrito:', error);
-        this.toastr.error('Ocurrió un error al procesar la compra de todos los productos del carrito.');
+    this._payPalService.createPayPalTransaction().subscribe(
+      (response) => {
+        window.location.href = response.approvalUrl; // Redirigir al usuario a la página de aprobación de PayPal
+      },
+      (error) => {
+        console.error('Error al crear la transacción de PayPal:', error);
+        this.toastr.error('Ocurrió un error al procesar la compra.');
       }
     );
   }

@@ -1,6 +1,8 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+// UserCart.ts
+import { Model, DataTypes, Optional, HasManyGetAssociationsMixin } from 'sequelize';
 import sequelize from '../db/connection';
 import User from './user';
+import CartItem from './CartItem';
 
 // Definición del modelo UserCart
 interface UserCartAttributes {
@@ -13,6 +15,9 @@ interface UserCartCreationAttributes extends Optional<UserCartAttributes, 'id'> 
 class UserCart extends Model<UserCartAttributes, UserCartCreationAttributes> implements UserCartAttributes {
     public id!: number;
     public userId!: number;
+
+    // Asociación
+    public items?: CartItem[]; // Define los items como propiedad opcional
 }
 
 UserCart.init({
@@ -40,4 +45,8 @@ UserCart.init({
 User.hasMany(UserCart, { foreignKey: 'userId' });
 UserCart.belongsTo(User, { foreignKey: 'userId' });
 
+// Define la relación con CartItem
+UserCart.hasMany(CartItem, { foreignKey: 'userCartId', as: 'items' });
+
 export default UserCart;
+

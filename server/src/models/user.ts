@@ -22,7 +22,7 @@ export const User = sequelize.define('user',{
     },
     correo: {
         type: DataTypes.STRING,
-        unique: true,
+        
     },
     password:{
         type: DataTypes.STRING,
