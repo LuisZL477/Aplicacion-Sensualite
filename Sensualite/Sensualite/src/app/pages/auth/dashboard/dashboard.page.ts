@@ -146,14 +146,22 @@ export class DashboardPage implements OnInit {
     setTimeout(() => this.animatingIcons.delete(index), 300);
 }
 
-  logout() {
-    // Elimina el token y el nombre del usuario del local storage
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
+logout() {
+  // Elimina el token y el nombre del usuario del local storage
+  localStorage.removeItem('token');
+  localStorage.removeItem('userName');
 
-    // Redirige al usuario a la página de login
-    this.router.navigate(['/login']);
-  }
+  // Elimina la cookie del token
+  this.deleteCookie('authToken');
+
+  // Redirige al usuario a la página de login
+  this.router.navigate(['/login']);
+}
+
+// Función para eliminar la cookie
+deleteCookie(name: string) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
 
   openMenu() {
     this.categoryService.getCategories().subscribe({
