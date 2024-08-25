@@ -89,15 +89,30 @@ export class CartPage implements OnInit {
     }
   }
 
+  // buyAllCart() {
+  //   this._payPalService.createPayPalTransaction().subscribe(
+  //     (response) => {
+  //       window.location.href = response.approvalUrl; // Redirigir al usuario a la página de aprobación de PayPal
+  //     },
+  //     (error) => {
+  //       console.error('Error al crear la transacción de PayPal:', error);
+  //       this.toastr.error('Ocurrió un error al procesar la compra.');
+  //     }
+  //   );
+  // }
+
   buyAllCart() {
     this._payPalService.createPayPalTransaction().subscribe(
       (response) => {
-        window.location.href = response.approvalUrl; // Redirigir al usuario a la página de aprobación de PayPal
+        const token = localStorage.getItem('token');
+        window.location.href = response.approvalUrl;
       },
       (error) => {
-        console.error('Error al crear la transacción de PayPal:', error);
-        this.toastr.error('Ocurrió un error al procesar la compra.');
+        this.toastr.error('Ocurrió un error al crear la transacción de PayPal.');
       }
     );
   }
+  
+
+  
 }

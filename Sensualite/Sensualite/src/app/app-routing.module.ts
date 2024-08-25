@@ -32,6 +32,14 @@ const routes: Routes = [
     path: 'categorias',
     loadChildren: () => import('./pages/auth/categorias/categorias.module').then(m => m.CategoriasPageModule)
   },
+  {
+    path: 'pago-exitoso',
+    loadChildren: () => import('./pages/auth/pago-exitoso/pago-exitoso.module').then( m => m.PagoExitosoPageModule)
+  },
+  {
+    path: 'pago-cancelado',
+    loadChildren: () => import('./pages/auth/pago-cancelado/pago-cancelado.module').then( m => m.PagoCanceladoPageModule)
+  },
 
   {
     path: '**',

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cookieParser = require('cookie-parser');
 const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
@@ -47,6 +48,10 @@ class Server {
         this.app.use(express_1.default.json());
         //cors
         this.app.use((0, cors_1.default)());
+        this.app.use(cookieParser({
+            origin: 'http://localhost:8100', // Cambia esto al puerto de tu frontend
+            credentials: true, // Permite el envío de cookies y credenciales
+        }));
     }
     dbConnect() {
         return __awaiter(this, void 0, void 0, function* () {

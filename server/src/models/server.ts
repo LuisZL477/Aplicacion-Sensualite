@@ -1,4 +1,5 @@
 import express, {Application} from 'express';
+const cookieParser = require('cookie-parser');
 import cors from 'cors'
 import routesProduct from '../routes/product';
 import routesUser from '../routes/user';
@@ -46,6 +47,11 @@ import  User  from './user';
         this.app.use(express.json());
         //cors
         this.app.use(cors());
+        this.app.use(cookieParser({
+            origin: 'http://localhost:8100', // Cambia esto al puerto de tu frontend
+            
+          credentials: true, // Permite el envío de cookies y credenciales
+          }));
     }
 
     async dbConnect() {

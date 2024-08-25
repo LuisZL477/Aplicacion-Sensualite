@@ -45,7 +45,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const { correo, password } = req.body;
 
     // Validamos si el usuario existe en la base de datos
-    const user: any = await User.findOne({ where: { correo: correo } });
+    const user: any = await User.findOne({ where: { correo } });
 
     if (!user) {
         return res.status(400).json({
@@ -65,11 +65,21 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign({
         id: user.id,
         correo: correo
-    }, process.env.SECRET_KEY || 'pepito123');
+    }, process.env.SECRET_KEY || 'pepito123', { expiresIn: '1h' });
 
-    res.json(token);
+    // Guardar el token en una cookie HTTP-only
+    res.cookie('authToken', token, {
+        httpOnly: true, // Asegura que la cookie no es accesible desde JavaScript en el frontend
+        secure: process.env.NODE_ENV === 'production', // Solo enviar cookie sobre HTTPS en producción
+        sameSite: 'strict', // Controla cuándo se envía la cookie, ajusta según tus necesidades
+        maxAge: 3600000 // 1 hora
+    });
+
+    // Devolver el token en la respuesta para almacenarlo en el local storage
+    res.json(token );
 };
 
+// Otros métodos (getUserById, updateUser, deleteUser) se mantienen igual
 // Mostrar un usuario por su ID (extraído del token)
 export const getUserById = async (req: Request, res: Response) => {
     const userId = req.userId;

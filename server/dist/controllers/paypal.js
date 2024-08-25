@@ -17,16 +17,23 @@ const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const UserCart_1 = __importDefault(require("../models/UserCart"));
 const CartItem_1 = __importDefault(require("../models/CartItem"));
 const product_1 = require("../models/product");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Configura PayPal con tus credenciales
 paypal_rest_sdk_1.default.configure({
-    mode: 'sandbox', // Cambia a 'live' para producción
-    client_id: process.env.PAYPAL_CLIENT_ID || '',
-    client_secret: process.env.PAYPAL_CLIENT_SECRET || '',
+    mode: 'sandbox',
+    client_id: process.env.PAYPAL_CLIENT_ID || 'AbamjI9Ap1Lh9fVuxJbJyRLyZEX5tx16OnqcxryaX9pGNRMNBRVfnW-OpKAUe_o3LiFBnLU2Tv38xlM7',
+    client_secret: process.env.PAYPAL_CLIENT_SECRET || 'EEhh4Y8LJdkb6TZjO2YXf3rh3tz349aQR7TFUuzcCn0mUQkDsSUNQg_qiwGMb056iG8sFFcDDAVLZvv2',
 });
 // Crear una transacción de PayPal
 const createPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.userId;
+    var _a;
+    const token = req.cookies.authToken || ((_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1]); // Obtener token de la cookie o del encabezado de autorización
+    if (!token) {
+        return res.status(401).json({ msg: 'Token no encontrado' });
+    }
     try {
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || 'pepito123');
+        const userId = decoded.id;
         const userCart = yield UserCart_1.default.findOne({
             where: { userId },
             include: [{
@@ -50,9 +57,7 @@ const createPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0, 
                 quantity: item.quantity,
             };
         });
-        const total = items.reduce((sum, item) => {
-            return sum + parseFloat(item.price) * item.quantity;
-        }, 0).toFixed(2);
+        const total = items.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0).toFixed(2);
         const createPaymentJson = {
             intent: 'sale',
             payer: {
@@ -63,9 +68,7 @@ const createPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0, 
                 cancel_url: `http://localhost:${process.env.PORT}/api/paypal/cancel`,
             },
             transactions: [{
-                    item_list: {
-                        items,
-                    },
+                    item_list: { items },
                     amount: {
                         currency: 'MXN',
                         total,
@@ -96,43 +99,55 @@ const createPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0, 
 exports.createPayPalTransaction = createPayPalTransaction;
 // Manejar el éxito de la transacción de PayPal
 const successPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { paymentId, PayerID } = req.query;
-    const executePaymentJson = {
-        payer_id: PayerID,
-    };
-    paypal_rest_sdk_1.default.payment.execute(paymentId, executePaymentJson, (error, payment) => __awaiter(void 0, void 0, void 0, function* () {
-        if (error) {
-            console.error('PayPal Execution Error:', error.response);
-            return res.status(500).json({ msg: 'Error al completar la transacción de PayPal', details: error.response });
-        }
-        try {
-            const userId = req.userId;
-            const userCart = yield UserCart_1.default.findOne({
-                where: { userId },
-                include: [{
-                        model: CartItem_1.default,
-                        as: 'items',
-                        include: [product_1.Product],
-                    }],
-            });
-            if (!userCart || !userCart.items) {
-                return res.status(404).json({ msg: 'Carrito no encontrado' });
+    const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.authToken; // Obtener el token de la cookie
+    if (!token) {
+        return res.status(401).json({ msg: 'Token no proporcionado' });
+    }
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || 'pepito123');
+        const userId = decoded.id;
+        const executePaymentJson = {
+            payer_id: PayerID,
+        };
+        paypal_rest_sdk_1.default.payment.execute(paymentId, executePaymentJson, (error, payment) => __awaiter(void 0, void 0, void 0, function* () {
+            if (error) {
+                console.error('PayPal Execution Error:', error.response);
+                return res.status(500).json({ msg: 'Error al completar la transacción de PayPal', details: error.response });
             }
-            for (const item of userCart.items) {
-                if (!item.product) {
-                    throw new Error(`Product not found for CartItem with ID ${item.id}`);
+            try {
+                const userCart = yield UserCart_1.default.findOne({
+                    where: { userId },
+                    include: [{
+                            model: CartItem_1.default,
+                            as: 'items',
+                            include: [product_1.Product],
+                        }],
+                });
+                if (!userCart || !userCart.items) {
+                    return res.status(404).json({ msg: 'Carrito no encontrado' });
                 }
-                item.product.existencia -= item.quantity;
-                yield item.product.save();
-                yield item.destroy();
+                for (const item of userCart.items) {
+                    if (!item.product) {
+                        throw new Error(`Product not found for CartItem with ID ${item.id}`);
+                    }
+                    item.product.existencia -= item.quantity;
+                    yield item.product.save();
+                    yield item.destroy();
+                }
+                res.status(200).json({ msg: 'Compra realizada con éxito' });
             }
-            res.status(200).json({ msg: 'Compra realizada con éxito' });
-        }
-        catch (error) {
-            console.error('Error al procesar el pago de PayPal:', error);
-            res.status(500).json({ msg: 'Ocurrió un error al procesar el pago de PayPal' });
-        }
-    }));
+            catch (error) {
+                console.error('Error al procesar el pago de PayPal:', error);
+                res.status(500).json({ msg: 'Ocurrió un error al procesar el pago de PayPal' });
+            }
+        }));
+    }
+    catch (error) {
+        console.error('Error al verificar el token:', error);
+        return res.status(401).json({ msg: 'Token no válido o expirado' });
+    }
 });
 exports.successPayPalTransaction = successPayPalTransaction;
 // Manejar la cancelación de la transacción de PayPal

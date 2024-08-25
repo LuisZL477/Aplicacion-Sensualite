@@ -33,7 +33,13 @@ export class AuthPage  {
 
     this._userService.login(user).subscribe({
       next: (token) => {
+        // Guardar el token en el local storage
         localStorage.setItem('token', token);
+
+        // Guardar el token en una cookie
+        this.setCookie('authToken', token, 1); // 1 día de expiración
+
+        // Navegar al dashboard
         this.router.navigate(['/dashboard']);
         this.showSuccessAlert('Inicio de sesión exitoso');
       },
@@ -41,6 +47,11 @@ export class AuthPage  {
         this.msjError(e);
       }
     });
+  }
+
+  setCookie(name: string, value: string, days: number) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/;`;
   }
 
   togglePasswordVisibility(inputType: string) {

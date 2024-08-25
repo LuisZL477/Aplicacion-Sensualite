@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
-    const headerToken = req.headers['authorization'];
+    // Intenta obtener el token desde la cookie primero
+    const token = req.cookies?.authToken || req.headers['authorization']?.split(' ')[1];
 
-    if (headerToken != undefined && headerToken.startsWith('Bearer ')) {
+    if (token) {
         try {
-            const bearerToken = headerToken.slice(7);
-            const decoded: any = jwt.verify(bearerToken, process.env.SECRET_KEY || 'pepito123');
+            const decoded: any = jwt.verify(token, process.env.SECRET_KEY || 'pepito123');
             req.userId = decoded.id; // Almacenar el id del usuario en req para usarlo en otras funciones
             next();
         } catch (error) {
@@ -21,6 +21,5 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 };
-
 
 export default validateToken;

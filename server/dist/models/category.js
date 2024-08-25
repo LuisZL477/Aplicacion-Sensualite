@@ -15,7 +15,6 @@ exports.Category = connection_1.default.define('category', {
     },
     nombre: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true
     }
 }, {
     timestamps: false,

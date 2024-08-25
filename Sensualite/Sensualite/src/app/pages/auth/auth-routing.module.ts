@@ -35,6 +35,18 @@ const routes: Routes = [
     path: 'categorias',
     loadChildren: () => import('./categorias/categorias.module').then( m => m.CategoriasPageModule)
   },
+  {
+    path: 'pago',
+    loadChildren: () => import('./pago/pago.module').then( m => m.PagoPageModule)
+  },
+  {
+    path: 'pago-exitoso',
+    loadChildren: () => import('./pago-exitoso/pago-exitoso.module').then( m => m.PagoExitosoPageModule)
+  },
+  {
+    path: 'pago-cancelado',
+    loadChildren: () => import('./pago-cancelado/pago-cancelado.module').then( m => m.PagoCanceladoPageModule)
+  },
 
   
 

@@ -52,7 +52,7 @@ exports.newUser = newUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { correo, password } = req.body;
     // Validamos si el usuario existe en la base de datos
-    const user = yield user_1.default.findOne({ where: { correo: correo } });
+    const user = yield user_1.default.findOne({ where: { correo } });
     if (!user) {
         return res.status(400).json({
             msg: `No existe un usuario con el correo ${correo} en la base de datos`
@@ -69,10 +69,19 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({
         id: user.id,
         correo: correo
-    }, process.env.SECRET_KEY || 'pepito123');
+    }, process.env.SECRET_KEY || 'pepito123', { expiresIn: '1h' });
+    // Guardar el token en una cookie HTTP-only
+    res.cookie('authToken', token, {
+        httpOnly: true, // Asegura que la cookie no es accesible desde JavaScript en el frontend
+        secure: process.env.NODE_ENV === 'production', // Solo enviar cookie sobre HTTPS en producción
+        sameSite: 'strict', // Controla cuándo se envía la cookie, ajusta según tus necesidades
+        maxAge: 3600000 // 1 hora
+    });
+    // Devolver el token en la respuesta para almacenarlo en el local storage
     res.json(token);
 });
 exports.loginUser = loginUser;
+// Otros métodos (getUserById, updateUser, deleteUser) se mantienen igual
 // Mostrar un usuario por su ID (extraído del token)
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;

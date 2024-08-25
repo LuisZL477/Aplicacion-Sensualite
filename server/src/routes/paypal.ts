@@ -6,6 +6,6 @@ const router = Router();
 
 router.post('/create', validateToken, createPayPalTransaction);
 router.get('/success', validateToken, successPayPalTransaction);
-router.get('/cancel', validateToken, cancelPayPalTransaction);
+router.get('/cancel', cancelPayPalTransaction);
 
 export default router;

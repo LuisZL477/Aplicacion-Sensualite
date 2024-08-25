@@ -15,7 +15,7 @@ export const Category = sequelize.define<CategoryInstance>('category', {
   },
   nombre: {
     type: DataTypes.STRING,
-    unique: true
+    
   }
 }, {
   timestamps: false,
