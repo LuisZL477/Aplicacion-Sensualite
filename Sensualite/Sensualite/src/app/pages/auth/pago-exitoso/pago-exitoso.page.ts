@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PayPalService } from 'src/app/services/paypal.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-pago-exitoso',
@@ -10,34 +10,36 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PagoExitosoPage implements OnInit {
 
-    constructor(
-      private route: ActivatedRoute,
-      private payPalService: PayPalService,
-      private toastr: ToastrService,
-      private router: Router
-    ) {}
-  
-    ngOnInit() {
-      this.route.queryParams.subscribe(params => {
-        const paymentId = params['paymentId'];
-        const payerId = params['PayerID'];
-  
-        if (paymentId && payerId) {
-          this.payPalService.successPayPalTransaction(paymentId, payerId).subscribe({
-            next: () => {
-              this.toastr.success('Compra realizada con éxito');
-              this.router.navigate(['/dashboard']);
-            },
-            error: () => {
-              this.toastr.error('Ocurrió un error al procesar el pago');
-              this.router.navigate(['/dashboard']);
-            }
-          });
-        } else {
-          this.toastr.warning('No se proporcionaron los parámetros de pago');
-          this.router.navigate(['/dashboard']);
-        }
-      });
-    }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const status = params['status'];
+
+      if (status === 'success') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Compra exitosa',
+          text: 'Compra realizada con éxito.',
+          confirmButtonColor: '#3085d6',
+          heightAuto: false,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al procesar el pago.',
+          confirmButtonColor: '#d33',
+          heightAuto: false,
+        });
+      }
+
+      setTimeout(() => {
+        this.router.navigate(['/dashboard']);
+      }); 
+    });
   }
-  
+}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pago-cancelado',
@@ -8,15 +8,23 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./pago-cancelado.page.scss'],
 })
 export class PagoCanceladoPage implements OnInit {
-  
-    constructor(
-      private toastr: ToastrService,
-      private router: Router
-    ) { }
-  
-    ngOnInit() {
-      this.toastr.info('La transacción fue cancelada.');
+
+  constructor(
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Transacción cancelada',
+      text: 'La transacción fue cancelada.',
+      confirmButtonColor: '#3085d6',
+      heightAuto: false, // Desactiva el ajuste automático de la altura
+    });
+
+    setTimeout(() => {
       this.router.navigate(['/dashboard']);
-    }
+    }); 
   }
-  
+}
+
