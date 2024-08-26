@@ -17,6 +17,8 @@ const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const UserCart_1 = __importDefault(require("../models/UserCart"));
 const CartItem_1 = __importDefault(require("../models/CartItem"));
 const product_1 = require("../models/product");
+const order_1 = __importDefault(require("../models/order"));
+const OrderItem_1 = __importDefault(require("../models/OrderItem")); // Importa el modelo OrderItem
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Configura PayPal con tus credenciales
 paypal_rest_sdk_1.default.configure({
@@ -129,6 +131,8 @@ const successPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0,
                     console.error('Carrito no encontrado después del pago');
                     return res.redirect(`http://localhost:8100/pago-exitoso?status=error`); // Redirige al frontend con estado de error
                 }
+                let totalAmount = 0;
+                const orderItems = [];
                 for (const item of userCart.items) {
                     if (!item.product) {
                         console.error(`Product not found for CartItem with ID ${item.id}`);
@@ -136,8 +140,24 @@ const successPayPalTransaction = (req, res) => __awaiter(void 0, void 0, void 0,
                     }
                     item.product.existencia -= item.quantity;
                     yield item.product.save();
+                    totalAmount += item.quantity * item.product.precio;
+                    orderItems.push({
+                        orderId: 0, // Se actualizará más adelante
+                        productId: item.product.id,
+                        quantity: item.quantity,
+                        price: item.product.precio,
+                    });
                     yield item.destroy();
                 }
+                // Guardar la orden en la base de datos
+                const order = yield order_1.default.create({
+                    userId: userId,
+                    totalAmount: totalAmount,
+                    status: 'Completed',
+                    paymentId: (payment === null || payment === void 0 ? void 0 : payment.id) || '',
+                });
+                // Actualizar orderId en cada orderItem y guardarlos en la base de datos
+                yield OrderItem_1.default.bulkCreate(orderItems.map(item => (Object.assign(Object.assign({}, item), { orderId: order.id }))));
                 res.redirect(`http://localhost:8100/pago-exitoso?status=success`); // Redirige al frontend con estado de éxito
             }
             catch (error) {

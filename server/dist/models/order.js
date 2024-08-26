@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 const user_1 = __importDefault(require("./user"));
+const OrderItem_1 = __importDefault(require("./OrderItem")); // Importación del modelo OrderItem
 class Order extends sequelize_1.Model {
 }
 Order.init({
@@ -40,6 +41,10 @@ Order.init({
     tableName: 'pedido',
     timestamps: true,
 });
+// Relación con User
 user_1.default.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(user_1.default, { foreignKey: 'userId' });
+// Relación con OrderItem
+Order.hasMany(OrderItem_1.default, { foreignKey: 'orderId', as: 'items' });
+OrderItem_1.default.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
 exports.default = Order;

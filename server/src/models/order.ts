@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../db/connection';
 import User from './user';
+import OrderItem from './OrderItem'; // Importación del modelo OrderItem
 
 interface OrderAttributes {
   id: number;
@@ -53,7 +54,13 @@ Order.init({
   timestamps: true,
 });
 
+// Relación con User
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
+// Relación con OrderItem
+Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'items' });
+OrderItem.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+
 export default Order;
+

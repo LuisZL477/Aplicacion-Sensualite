@@ -31,13 +31,10 @@ const routes: Routes = [
   {
     path: 'edituser',
     loadChildren: () => import('./edituser/edituser.module').then( m => m.EdituserPageModule)
-  },  {
-    path: 'categorias',
-    loadChildren: () => import('./categorias/categorias.module').then( m => m.CategoriasPageModule)
   },
   {
-    path: 'pago',
-    loadChildren: () => import('./pago/pago.module').then( m => m.PagoPageModule)
+    path: 'categorias',
+    loadChildren: () => import('./categorias/categorias.module').then( m => m.CategoriasPageModule)
   },
   {
     path: 'pago-exitoso',
@@ -46,7 +43,11 @@ const routes: Routes = [
   {
     path: 'pago-cancelado',
     loadChildren: () => import('./pago-cancelado/pago-cancelado.module').then( m => m.PagoCanceladoPageModule)
+  },  {
+    path: 'compras',
+    loadChildren: () => import('./compras/compras.module').then( m => m.ComprasPageModule)
   },
+
 
   
 

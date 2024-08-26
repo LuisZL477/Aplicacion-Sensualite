@@ -40,6 +40,10 @@ const routes: Routes = [
     path: 'pago-cancelado',
     loadChildren: () => import('./pages/auth/pago-cancelado/pago-cancelado.module').then( m => m.PagoCanceladoPageModule)
   },
+    {
+      path: 'compras',
+      loadChildren: () => import('./pages/auth/compras/compras.module').then( m => m.ComprasPageModule)
+    },
 
   {
     path: '**',

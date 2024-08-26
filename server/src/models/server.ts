@@ -5,7 +5,8 @@ import routesProduct from '../routes/product';
 import routesUser from '../routes/user';
 import routesCart from '../routes/cart';
 import routesCategory from '../routes/category';
-import routesPaypal from '../routes/paypal'
+import routesPaypal from '../routes/paypal';
+import routesOrder from '../routes/order';
 import db from '../db/connection';
 import { Product } from './product';
 import  User  from './user';
@@ -38,6 +39,7 @@ import  User  from './user';
         this.app.use('/api/carts', routesCart);
         this.app.use('/api/categories', routesCategory);
         this.app.use('/api/paypal', routesPaypal);
+        this.app.use('/api', routesOrder);
 
         
     }

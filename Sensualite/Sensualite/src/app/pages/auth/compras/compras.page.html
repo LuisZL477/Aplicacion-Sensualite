@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/dashboard"></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-icon src="assets/Sensualite_Logo.svg" color="primary" class="shield-icon"></ion-icon>
+        </ion-buttons>
+        <ion-title>Mis Compras</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Mis Compras</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+            <ion-card *ngFor="let purchase of purchases">
+                <ion-card class="product-card">
+                    <ion-card-header>
+                        <ion-card-title>Compra</ion-card-title>
+                        <ion-card-subtitle>Fecha: {{purchase.createdAt | date: 'short'}}</ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p><strong>Total:</strong> {{purchase.totalAmount | currency: 'MXN'}}</p>
+                        <ion-list>
+                            <ion-item *ngFor="let item of purchase.items">
+                                <ion-thumbnail slot="start">
+                                    <img [src]="'http://localhost:3000/uploads/' + item.product.imagen" alt="{{item.product.nombre}}">
+                                </ion-thumbnail>
+                                <ion-label>
+                                    <h2>{{item.product.nombre}}</h2>
+                                    <p>Precio: {{item.price | currency: 'MXN'}} | Cantidad: {{item.quantity}}</p>
+                                </ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-card>
+        </ion-list>
+
+        <ion-refresher slot="fixed" (ionRefresh)="loadPurchases($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+    </ion-content>
+</ion-content>

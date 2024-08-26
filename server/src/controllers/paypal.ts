@@ -3,6 +3,8 @@ import paypal from 'paypal-rest-sdk';
 import UserCart from '../models/UserCart';
 import CartItem from '../models/CartItem';
 import { Product } from '../models/product';
+import Order from '../models/order';
+import OrderItem from '../models/OrderItem'; // Importa el modelo OrderItem
 import jwt from 'jsonwebtoken';
 
 // Configura PayPal con tus credenciales
@@ -134,6 +136,9 @@ export const successPayPalTransaction = async (req: Request, res: Response) => {
           return res.redirect(`http://localhost:8100/pago-exitoso?status=error`); // Redirige al frontend con estado de error
         }
 
+        let totalAmount = 0;
+        const orderItems = [];
+
         for (const item of userCart.items) {
           if (!item.product) {
             console.error(`Product not found for CartItem with ID ${item.id}`);
@@ -141,8 +146,29 @@ export const successPayPalTransaction = async (req: Request, res: Response) => {
           }
           item.product.existencia -= item.quantity;
           await item.product.save();
+
+          totalAmount += item.quantity * item.product.precio;
+
+          orderItems.push({
+            orderId: 0, // Se actualizará más adelante
+            productId: item.product.id,
+            quantity: item.quantity,
+            price: item.product.precio,
+          });
+
           await item.destroy();
         }
+
+        // Guardar la orden en la base de datos
+        const order = await Order.create({
+          userId: userId,
+          totalAmount: totalAmount,
+          status: 'Completed',
+          paymentId: payment?.id || '',
+        });
+
+        // Actualizar orderId en cada orderItem y guardarlos en la base de datos
+        await OrderItem.bulkCreate(orderItems.map(item => ({ ...item, orderId: order.id })));
 
         res.redirect(`http://localhost:8100/pago-exitoso?status=success`); // Redirige al frontend con estado de éxito
       } catch (error) {
